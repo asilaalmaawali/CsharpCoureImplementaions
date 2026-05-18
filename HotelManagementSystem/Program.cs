@@ -12,10 +12,10 @@ namespace HotelManagementSystem
             // System Storage 
 
             string guestName = "";
-            string guestPhone = "";
+            int guestPhone = 0;
             int roomNumber = 0;
             string roomType = "";
-            string nightlyRate = "";
+            double nightlyRate = 0.00;
             DateTime check_inDate;
             DateTime check_outDate;
             int number_of_nights = 0;
@@ -50,14 +50,29 @@ namespace HotelManagementSystem
                 switch (option)
                 {
                     case 0:                                       // 0. Register New Guest"
-
+               
+                        Console.WriteLine(" ========== Registeration ============");
+                        Console.WriteLine(" Enter the guest Name :    ");
+                        guestName = Console.ReadLine().Trim();           // removes the space from the begining and end (not in between)
+                        Console.WriteLine(" Enter the guest Phone:  ");
+                        guestPhone = int.Parse(Console.ReadLine());
+                        Console.WriteLine(" Enter the room type:");
+                        roomType = Console.ReadLine();
+                        Console.WriteLine(" Enter the nightly rate :  ");
+                        nightlyRate = double.Parse(Console.ReadLine());
+                        Random random = new Random();   // here we need first to generate a random genrator
+                        roomNumber = random.Next(1, 100);
 
                         break;
 
                     case 1:                                  // 1. View Guest Information
 
 
-
+                        Console.WriteLine(" ========== View Guest Information ============"); 
+                        Console.WriteLine(" Guest name : " + guestName.ToUpper()); // display name with Upper case
+                        Console.WriteLine(" Guest Phone : " + guestPhone.ToString()); // convert phone to string
+                        Console.WriteLine(" room type :" + roomType);
+                        Console.WriteLine(" nightly rate " + Math.Round(nightlyRate).ToString()); //  when we use round , the data type should be double + converted to string
                         break;
 
                     case 2:                                 // 2. Check-In Guest 
@@ -122,12 +137,6 @@ namespace HotelManagementSystem
             }
 
         }
-
-
-
-
-
-
 
 
    

@@ -162,33 +162,56 @@ namespace HotelManagementSystem
 
                         Console.WriteLine(" ========== Check-In Guest  ============");
 
-                        Console.WriteLine(" Enter the guest Name :    ");
-                        string name = Console.ReadLine().Trim();
-
-
-                        if (guestName == name )
-
+                        if (flag_checked == true)          // if 
                         {
-                            Console.WriteLine(" Enter the number of nights :");
-                            number_of_nights = int.Parse(Console.ReadLine());
-                            check_inDate = DateTime.Now;                              // to have current date with clock
-                            check_inDate = DateTime.Today;                            // current date
-                            check_outDate = check_inDate.AddDays(number_of_nights);     // adding nights in check_inDate , they give us the check out date
 
-                            Console.WriteLine("Check-In Date: " + check_inDate.ToString());  // to convert date to string
-                            Console.WriteLine("Check-Out Date: " + check_outDate.ToString());
-               
+                            Console.WriteLine(" The guest already check-in");
+
                         }
                         else
                         {
-                            Console.WriteLine(" there is no guest with this name ");
 
+                            Console.WriteLine("Enter guest name:");
+                            string name = Console.ReadLine().Trim();
+
+                            if (guestName == name)
+
+                            {
+
+
+                                Console.WriteLine(" Enter the number of nights :");
+                                number_of_nights = int.Parse(Console.ReadLine());
+                                check_inDate = DateTime.Now;                              // to have current date with clock
+                                //check_inDate = DateTime.Today;                            // current date , i cant use both (today and now)
+                                check_outDate = check_inDate.AddDays(number_of_nights);     // adding nights in check_inDate , they give us the check out date
+
+                                Console.WriteLine("Check-In Date: " + check_inDate.ToString("dd/MM/yyyy HH:mm:ss")); // to convert date to string and specific format to show
+                                Console.WriteLine("Check-Out Date: " + check_outDate.ToString("dd/MM/yyyy HH:mm:ss"));
+                                flag_checked = true;             // to fill it not be empty
+
+                            }
+                            else
+                            {
+                                Console.WriteLine(" there is no guest with this name ");
+
+                            }
                         }
-
-                        break;
+                             break;
 
                     case 3:                            // 3 Check-Out & Bill
 
+                        Console.WriteLine("===== Check-Out & Bill =====");
+
+                        //if (flag_checked == false)  // there is no guest yet
+                        //{
+                        //    Console.WriteLine("Guest has not checked in yet");
+                        //}
+                        //else
+                        //{
+
+
+
+                        //}
 
 
 

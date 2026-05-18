@@ -289,7 +289,7 @@ namespace HotelManagementSystem
                             }
                         }
 
-                            break;
+                        break;
 
                     case 8:                                // 8. Calculate Loyalty Points"
 
@@ -303,8 +303,33 @@ namespace HotelManagementSystem
 
                     case 10:                               //10. Edit Guest Name
 
+                        Console.WriteLine("===== Edit Guest Name =====");
 
+                        if (flag_guest == false)
+                        {
+                            Console.WriteLine("No guest registered yet.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Enter guest name keyword to search:");
+                            string keyword = Console.ReadLine().ToLower();  // will read in lower case
+
+                            if (guestName.ToLower().Contains(keyword))
+                            {
+                         
+                                Console.WriteLine("Enter new guest name:");
+                                guestName = Console.ReadLine().Trim();  // delete the spaces
+
+                                Console.WriteLine("guest name updated successfully");
+                            }
+                            else
+                            {
+                                Console.WriteLine("guest not found");
+                            }
+                        }
+                
                         break;
+                        
 
 
 

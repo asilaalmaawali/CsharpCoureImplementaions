@@ -21,7 +21,7 @@ namespace HotelManagementSystem
             DateTime check_outDate;
             int number_of_nights = 0;
             string room_notes = "";
-            double discount_percentage;
+            double discount_percentage = 0;
             int loyaltyPoints;
             bool flag_guest=false;
             bool flag_checked=false;
@@ -51,7 +51,7 @@ namespace HotelManagementSystem
                 switch (option)
                 {
                     case 0:                                       // 0. Register New Guest"
-                      
+
                         Console.WriteLine(" ========== Registration ============");
 
                         if (flag_guest == true)       // if its already their is a guest 
@@ -84,7 +84,7 @@ namespace HotelManagementSystem
 
                                     flag_guest = true;    // here to set it as full or their is a Guest
 
-                                    Console.WriteLine("Guest registered successfully");      
+                                    Console.WriteLine("Guest registered successfully");
                                 }
                                 else if (choice == 2)
                                 {
@@ -125,7 +125,7 @@ namespace HotelManagementSystem
                                             Console.WriteLine("Returning to Registration Menu...");
                                             Console.ReadKey();
                                             Console.Clear();
-                                           
+
                                         }
                                         else
                                         {
@@ -142,7 +142,7 @@ namespace HotelManagementSystem
                                     Console.WriteLine("Returning to  Hotel Main Menu...");
                                     Console.ReadKey();
                                     Console.Clear();
-                                    
+
                                 }
                             }
                         }
@@ -151,7 +151,7 @@ namespace HotelManagementSystem
                     case 1:                                  // 1. View Guest Information
 
 
-                        Console.WriteLine(" ========== View Guest Information ============"); 
+                        Console.WriteLine(" ========== View Guest Information ============");
                         Console.WriteLine(" Guest name : " + guestName.ToUpper()); // display name with Upper case
                         Console.WriteLine(" Guest Phone : " + guestPhone.ToString()); // convert phone to string
                         Console.WriteLine(" room type :" + roomType);
@@ -196,29 +196,57 @@ namespace HotelManagementSystem
 
                             }
                         }
-                             break;
+                        break;
 
                     case 3:                            // 3 Check-Out & Bill
 
                         Console.WriteLine("===== Check-Out & Bill =====");
 
-                        //if (flag_checked == false)  // there is no guest yet
-                        //{
-                        //    Console.WriteLine("Guest has not checked in yet");
-                        //}
-                        //else
-                        //{
+                        //it should be outside the if or scope
+                        double totalBill = nightlyRate * number_of_nights;         // declare total bill 
+                        double finalBill = totalBill - discount_percentage;        // declare final bill after discount
+
+                        if (flag_guest == false)    // no guest
+                        {
+                            Console.WriteLine("No guest registered ");
+                        }
+                        else if (flag_checked == false)      // no guest check in
+                        {
+                            Console.WriteLine("Guest has not checked in yet ");
+                        }
+                        else
+                        {
+
+                            check_inDate = DateTime.Now;                              // to have current date with clock                
+                            check_outDate = check_inDate.AddDays(number_of_nights);
+                            Console.WriteLine(" Check-Out Date: " + check_outDate.ToString("dd/MM/yyyy HH:mm"));
 
 
+                            if (finalBill < 0)
+                                finalBill = 0;       // force it to be zero , to not accept negative value
 
-                        //}
+                            Console.WriteLine("Total Bill: " + Math.Round(totalBill, 2).ToString());
+                            Console.WriteLine("Discount: " + discount_percentage.ToString());
+                            Console.WriteLine("Final Bill: " + Math.Round(finalBill, 2).ToString());
 
-
-
-
+                        }
                         break;
 
                     case 4:                         //4. Apply Discount 
+
+                        Console.WriteLine("Enter discount percentage:");
+                        discount_percentage = double.Parse(Console.ReadLine());
+
+                        totalBill = nightlyRate * number_of_nights;   // i do it again because the firat one inside (if)
+
+                        double amountSaved = Math.Round(totalBill, 2) * (discount_percentage / 100);  // how much he saved money after applying discount
+                        finalBill = Math.Round(totalBill, 2) - Math.Round(amountSaved, 2);  // final bill 
+
+                        Console.WriteLine("===== BILL SUMMARY =====");
+                        Console.WriteLine("original amount : " + Math.Round(totalBill, 2).ToString());
+                        Console.WriteLine("discount %: " + discount_percentage + "%");
+                        Console.WriteLine("Amount Saved: " + Math.Round(amountSaved, 2).ToString());
+                        Console.WriteLine("Final bill: " + Math.Abs(finalBill).ToString());
 
 
                         break;

@@ -263,9 +263,33 @@ namespace HotelManagementSystem
                         break;
 
                     case 7:                                  // 7. Search Guest by Name 
+                        Console.WriteLine("===== Search Guest by Name =====");
 
 
-                        break;
+                        if (flag_guest == false)  // if there is no guest yet
+                        {
+                            Console.WriteLine("No guest registered yet");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Enter search keyword:");
+                            string keyword = Console.ReadLine().ToLower();    // whatever i press will be in lower case
+
+                            string SearchName = guestName.ToLower();       // because in the beginning i used upper case for guest name, i need to converted to lower case to be easy to search
+
+                            if (SearchName.Contains(keyword))
+                            {
+                                Console.WriteLine("Guest Name: " + guestName);
+                                Console.WriteLine("Phone: " + guestPhone);
+                                Console.WriteLine("Room Type: " + roomType);
+                            }
+                            else
+                            {
+                                Console.WriteLine("No matching guest found.");
+                            }
+                        }
+
+                            break;
 
                     case 8:                                // 8. Calculate Loyalty Points"
 

@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.ComponentModel.Design;
+using System.Net.NetworkInformation;
 using System.Reflection.PortableExecutable;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -15,7 +16,7 @@ namespace HotelManagementSystem
             int guestPhone = 0;
             int roomNumber = 0;
             string roomType = "";        //  Single , Double , Suite
-            double nightlyRate = 0.00;
+            double nightlyRate = 0.00;    
             DateTime check_inDate;
             DateTime check_outDate;
             int number_of_nights = 0;
@@ -50,81 +51,130 @@ namespace HotelManagementSystem
                 switch (option)
                 {
                     case 0:                                       // 0. Register New Guest"
-               
-                        Console.WriteLine(" ========== Registeration ============");
-                        Console.WriteLine("1. Guest registeration ");
-                        Console.WriteLine("2. Room type option");
-                        Console.WriteLine("Enter the choice :   ");
-                        int choice = int.Parse(Console.ReadLine());
-                        Random random = new Random();   // here we need first to generate a random genrator
 
-                        if (choice == 1)
+
+                        bool RegisterationMenu = false;
+
+                        while (RegisterationMenu == false)
                         {
 
-                            Console.WriteLine(" Enter the guest Name :    ");
-                            guestName = Console.ReadLine().Trim();           // removes the space from the begining and end (not in between)
-                            Console.WriteLine(" Enter the guest Phone:  ");
-                            guestPhone = int.Parse(Console.ReadLine());
-                            roomNumber = random.Next(1, 100);
 
-                        }
-                        else if (choice == 2)
-                        {
+                            Console.WriteLine(" ========== Registeration ============");
+                            Console.WriteLine("1. Guest registeration ");
+                            Console.WriteLine("2. Room type option");
+                            Console.WriteLine("0. Exit ");
+                            Console.WriteLine("Enter the choice :   ");
+                            int choice = int.Parse(Console.ReadLine());
+                            Random random = new Random();   // here we need first to generate a random genrator
 
-                            Console.WriteLine("===== Room Type =====");
-                            Console.WriteLine("1. Single room ");
-                            Console.WriteLine("2. Double room ");
-                            Console.WriteLine("3. Suite room ");
-                            Console.WriteLine("Enter the number :    ");
-                            int number = int.Parse(Console.ReadLine());
-
-                            if (number == 1)
-
+                            if (choice == 1)
                             {
-                                roomType = "Single room";
-                                nightlyRate = 25.5;
-                                Console.WriteLine("Single room" + nightlyRate);
+
+                                Console.WriteLine(" Enter the guest Name :    ");
+                                guestName = Console.ReadLine().Trim();           // removes the space from the begining and end (not in between)
+                                Console.WriteLine(" Enter the guest Phone:  ");
+                                guestPhone = int.Parse(Console.ReadLine());
+                                roomNumber = random.Next(1, 100);
+
+                                int exit_gr = -1;
+                                Console.WriteLine("Enter number 0 to exit");
+                                exit_gr = int.Parse(Console.ReadLine());
+
+
+                                if (exit_gr == 0)
+                                {
+                                    Console.WriteLine("press any key to continue...");
+                                    Console.ReadKey();  // to press any key to clear
+                                    Console.Clear(); // clear the console 
+                                }
+                                else
+                                {
+
+                                    Console.WriteLine("Invalid number");
+
+
+                                }
 
                             }
-                            else if (number == 2)
+
+                            else if (choice == 2)
                             {
-                                roomType = " Double room";
-                                nightlyRate = 40.50;
-                                Console.WriteLine("Double room" + nightlyRate);
+
+
+                                bool roomTypeMenu = false;
+
+                                while (roomTypeMenu == false)
+                                {
+
+                                    Console.WriteLine("===== Room Type =====");
+                                    Console.WriteLine("1. Single room ");
+                                    Console.WriteLine("2. Double room ");
+                                    Console.WriteLine("3. Suite room ");
+                                    Console.WriteLine("0. Exit ");
+                                    Console.WriteLine("Enter the number :    ");
+                                    int number = int.Parse(Console.ReadLine());
+
+
+                                    if (number == 1)
+
+                                    {
+                                        roomType = "Single room";
+                                        nightlyRate = 25;
+                                        Console.WriteLine(" A single room has been booked ");
+
+                                    }
+                                    else if (number == 2)
+                                    {
+                                        roomType = " Double room";
+                                        nightlyRate = 50;
+                                        Console.WriteLine(" A Double room has been booked ");
+
+                                    }
+                                    else if (number == 3)
+                                    {
+                                        roomType = " Suite room";
+                                        nightlyRate = 100;
+                                        Console.WriteLine(" A Suite room has been booked ");
+
+                                    }
+                                    else if (number == 0)
+                                    {
+                                        roomTypeMenu = true;
+
+                                        Console.WriteLine("Returning to Registration Menu...");
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(" Invalied number ");
+                                    }
+                                }
+
+
                             }
-                            else if (number == 3)
+                            else if (choice == 0)
                             {
-                                Console.WriteLine("Suite room");
-                                roomType = " Suite room";
-                                nightlyRate = 100.50;
-                                Console.WriteLine("Suite room" + nightlyRate);
+
+                                RegisterationMenu = true;
+
+                                Console.WriteLine("Returning to  Hotel Main Menu...");
+                                Console.ReadKey();
+                                Console.Clear();
+
+
 
                             }
-
-
-
                             else
-                            {
-                                Console.WriteLine("Suite room" + nightlyRate);
+                                {
+
+                                Console.WriteLine(" Invalied choice ");
 
                             }
 
 
-
-
-
-
-
-
-
-
-
                         }
-
-                        
-                       
-
-                        break;
+                            break;
 
                     case 1:                                  // 1. View Guest Information
 

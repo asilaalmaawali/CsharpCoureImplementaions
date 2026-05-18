@@ -14,7 +14,7 @@ namespace HotelManagementSystem
             string guestName = "";
             int guestPhone = 0;
             int roomNumber = 0;
-            string roomType = "";
+            string roomType = "";        //  Single , Double , Suite
             double nightlyRate = 0.00;
             DateTime check_inDate;
             DateTime check_outDate;
@@ -52,16 +52,77 @@ namespace HotelManagementSystem
                     case 0:                                       // 0. Register New Guest"
                
                         Console.WriteLine(" ========== Registeration ============");
-                        Console.WriteLine(" Enter the guest Name :    ");
-                        guestName = Console.ReadLine().Trim();           // removes the space from the begining and end (not in between)
-                        Console.WriteLine(" Enter the guest Phone:  ");
-                        guestPhone = int.Parse(Console.ReadLine());
-                        Console.WriteLine(" Enter the room type:");
-                        roomType = Console.ReadLine();
-                        Console.WriteLine(" Enter the nightly rate :  ");
-                        nightlyRate = double.Parse(Console.ReadLine());
+                        Console.WriteLine("1. Guest registeration ");
+                        Console.WriteLine("2. Room type option");
+                        Console.WriteLine("Enter the choice :   ");
+                        int choice = int.Parse(Console.ReadLine());
                         Random random = new Random();   // here we need first to generate a random genrator
-                        roomNumber = random.Next(1, 100);
+
+                        if (choice == 1)
+                        {
+
+                            Console.WriteLine(" Enter the guest Name :    ");
+                            guestName = Console.ReadLine().Trim();           // removes the space from the begining and end (not in between)
+                            Console.WriteLine(" Enter the guest Phone:  ");
+                            guestPhone = int.Parse(Console.ReadLine());
+                            roomNumber = random.Next(1, 100);
+
+                        }
+                        else if (choice == 2)
+                        {
+
+                            Console.WriteLine("===== Room Type =====");
+                            Console.WriteLine("1. Single room ");
+                            Console.WriteLine("2. Double room ");
+                            Console.WriteLine("3. Suite room ");
+                            Console.WriteLine("Enter the number :    ");
+                            int number = int.Parse(Console.ReadLine());
+
+                            if (number == 1)
+
+                            {
+                                roomType = "Single room";
+                                nightlyRate = 25.5;
+                                Console.WriteLine("Single room" + nightlyRate);
+
+                            }
+                            else if (number == 2)
+                            {
+                                roomType = " Double room";
+                                nightlyRate = 40.50;
+                                Console.WriteLine("Double room" + nightlyRate);
+                            }
+                            else if (number == 3)
+                            {
+                                Console.WriteLine("Suite room");
+                                roomType = " Suite room";
+                                nightlyRate = 100.50;
+                                Console.WriteLine("Suite room" + nightlyRate);
+
+                            }
+
+
+
+                            else
+                            {
+                                Console.WriteLine("Suite room" + nightlyRate);
+
+                            }
+
+
+
+
+
+
+
+
+
+
+
+                        }
+
+                        
+                       
 
                         break;
 
@@ -77,9 +138,38 @@ namespace HotelManagementSystem
 
                     case 2:                                 // 2. Check-In Guest 
 
+                        Console.WriteLine(" ========== Check-In Guest  ============");
+
+                        Console.WriteLine(" Enter the guest Name :    ");
+                        string name = Console.ReadLine().Trim();
+
+
+                        if (guestName == name )
+
+                        {
+                            Console.WriteLine(" Enter the number of nights :");
+                            number_of_nights = int.Parse(Console.ReadLine());
+                            check_inDate = DateTime.Now;
+                            check_inDate = DateTime.Today;
+                            check_outDate = check_inDate.AddDays(number_of_nights);
+
+                            Console.WriteLine("Check-In Date: " + check_inDate.ToString());  // to convert date to string
+                            Console.WriteLine("Check-Out Date: " + check_outDate.ToString());
+               
+                        }
+                        else
+                        {
+                            Console.WriteLine(" there is no guest with this name ");
+
+                        }
+
                         break;
 
                     case 3:                            // 3 Check-Out & Bill
+
+
+
+
 
                         break;
 

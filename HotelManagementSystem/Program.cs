@@ -181,10 +181,12 @@ namespace HotelManagementSystem
 
                                 Console.WriteLine(" Enter the number of nights :");
                                 number_of_nights = int.Parse(Console.ReadLine());
+                                DateTime Today = DateTime.Today;                            // current date , i cant use both (today and now)
                                 check_inDate = DateTime.Now;                              // to have current date with clock
-                                //check_inDate = DateTime.Today;                            // current date , i cant use both (today and now)
                                 check_outDate = check_inDate.AddDays(number_of_nights);     // adding nights in check_inDate , they give us the check out date
 
+
+                                Console.WriteLine("Today : " + Today.ToString("dd/MM/yyyy HH:mm:ss"));
                                 Console.WriteLine("Check-In Date: " + check_inDate.ToString("dd/MM/yyyy HH:mm:ss")); // to convert date to string and specific format to show
                                 Console.WriteLine("Check-Out Date: " + check_outDate.ToString("dd/MM/yyyy HH:mm:ss"));
                                 flag_checked = true;             // to fill it not be empty
@@ -253,6 +255,57 @@ namespace HotelManagementSystem
 
 
                     case 5:                                  // 5. Upgrade Room 
+                   
+                        // Upgrade Room
+                        Console.Clear();
+
+                        
+                        string oldRoomType = roomType;   // i store here the old room type
+                        double oldRate = nightlyRate;   // i store here the old night rate
+
+                        Console.WriteLine("===== Upgrade Room =====");
+                        Console.WriteLine("1. Single room ");
+                        Console.WriteLine("2. Double room ");
+                        Console.WriteLine("3. Suite room ");
+                        Console.WriteLine(" Enter choice to upgrade the room ");
+                        int upgradeChoice = int.Parse(Console.ReadLine());
+
+                        // New upgraded room
+                        if (upgradeChoice == 1)
+                        {
+                            roomType = "Single room";
+                            nightlyRate = 25;
+                        }
+                        else if (upgradeChoice == 2)
+                        {
+                            roomType = "Double room";
+                            nightlyRate = 50;
+                        }
+                        else if (upgradeChoice == 3)
+                        {
+                            roomType = "Suite room";
+                            nightlyRate = 100;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid number");
+                        }
+
+                     
+                        double higherRate = Math.Max(oldRate, nightlyRate);
+                        double lowerRate = Math.Min(oldRate, nightlyRate);
+                        double difference = Math.Abs(nightlyRate - oldRate);  // to take difference amount ( remaining price )
+
+                        // Output
+                        Console.WriteLine("===== Upgrade Details =====");
+
+                        Console.WriteLine("Old Room Type : " + oldRoomType);
+                        Console.WriteLine("New Room Type : " + roomType);
+
+                        Console.WriteLine("Higher Rate : " + higherRate);
+                        Console.WriteLine("Lower Rate : " + lowerRate);
+
+                        Console.WriteLine("Difference Per Night : " + difference);
 
 
                         break;

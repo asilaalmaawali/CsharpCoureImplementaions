@@ -155,7 +155,9 @@ namespace HotelManagementSystem
                         Console.WriteLine(" Guest name : " + guestName.ToUpper()); // display name with Upper case
                         Console.WriteLine(" Guest Phone : " + guestPhone.ToString()); // convert phone to string
                         Console.WriteLine(" room type :" + roomType);
+                        Console.WriteLine(" room number :" + roomNumber);
                         Console.WriteLine(" nightly rate " + Math.Round(nightlyRate).ToString()); //  when we use round , the data type should be double + converted to string
+
                         break;
 
                     case 2:                                 // 2. Check-In Guest 
@@ -184,11 +186,16 @@ namespace HotelManagementSystem
                                 DateTime Today = DateTime.Today;                            // current date , i cant use both (today and now)
                                 check_inDate = DateTime.Now;                              // to have current date with clock
                                 check_outDate = check_inDate.AddDays(number_of_nights);     // adding nights in check_inDate , they give us the check out date
-
-
+           
+                              
                                 Console.WriteLine("Today : " + Today.ToString("dd/MM/yyyy HH:mm:ss"));
                                 Console.WriteLine("Check-In Date: " + check_inDate.ToString("dd/MM/yyyy HH:mm:ss")); // to convert date to string and specific format to show
                                 Console.WriteLine("Check-Out Date: " + check_outDate.ToString("dd/MM/yyyy HH:mm:ss"));
+
+                                Console.WriteLine(" Enter the Special note from guest :");  // here after he check-in , he can tell us the service note ( which time he want room service come or want he need)
+                                room_notes = Console.ReadLine();
+
+
                                 flag_checked = true;             // to fill it not be empty
 
                             }
@@ -312,6 +319,33 @@ namespace HotelManagementSystem
 
                     case 6:                                  //6. Add Room Service Note
 
+
+                        Console.WriteLine("=== Add Room Service Note ===");          // we take the note from the guest and recorded
+
+                        Console.Write("Enter service note: ");
+                        string newNote = Console.ReadLine().Trim();         
+
+
+                     
+                        if (newNote == "")         // should not be blank
+                        {
+                            Console.WriteLine("Error: Note cannot be empty.");
+                            break;
+                        }
+
+                        // Existing notes variable
+
+                        room_notes = room_notes + " | " + newNote;
+
+                        room_notes = room_notes.Replace("bad", "***");  // replace bad to *** in the system
+
+                       
+                        Console.WriteLine("Updated Notes:");
+                        Console.WriteLine(room_notes);   // will print old note  |  newNote
+
+
+
+                        Console.WriteLine("Total Notes Length: " + room_notes.Length);  // to total length of the note
 
                         break;
 

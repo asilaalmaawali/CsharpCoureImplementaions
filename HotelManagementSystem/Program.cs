@@ -22,7 +22,7 @@ namespace HotelManagementSystem
             int number_of_nights = 0;
             string room_notes = "";
             double discount_percentage = 0;
-            int loyaltyPoints;
+            double loyaltyPoints= 0;
             bool flag_guest=false;
             bool flag_checked=false;
 
@@ -380,10 +380,56 @@ namespace HotelManagementSystem
 
                     case 8:                                // 8. Calculate Loyalty Points"
 
+                        Console.WriteLine("=== Loyalty Points ===");
+                        
+
+                  
+                        double earnedPoints = Math.Pow(number_of_nights, 2);  //  Earn points equal to the square of nights stayed. 
+
+
+                        loyaltyPoints = loyaltyPoints + Math.Round(earnedPoints);  // apply Math.Round to earnedPoints     //total points  .      loyaltyPoints = 0 , because this is the first time he stayed
+
+
+                        Console.WriteLine("Points Earned : " + earnedPoints.ToString());   // converted to string in printing
+                        Console.WriteLine("Total Loyalty Points : " + loyaltyPoints.ToString());
 
                         break;
 
+
                     case 9:                                //9. Print Receipt
+
+
+                        
+                        Console.WriteLine("===== HOTEL RECEIPT =====");
+                        Console.WriteLine("Name:  " +guestName.Trim());
+                        Console.WriteLine("Room Type :  " + roomType);
+                        Console.WriteLine("Stayed nights :  " + number_of_nights.ToString());
+                        totalBill = nightlyRate * number_of_nights;         //  total bill to can use it for : if (discount_percentage > 0)
+
+
+                        if (discount_percentage > 0)                    // if discount more than one here we apply the final bill with discount
+                        {
+
+                            finalBill = totalBill - discount_percentage;
+                            Console.WriteLine("Bill :  " + finalBill.ToString());   //  final bill after discount
+                            
+
+
+                        }
+                        else                                 // here appear without discount
+                        {
+
+                            totalBill = nightlyRate * number_of_nights;
+                            Console.WriteLine("Bill :  " + totalBill.ToString());   // total bill without applying discount
+
+                        }
+
+
+                        check_inDate = DateTime.Now;                              // to have current date with clock                
+                        check_outDate = check_inDate.AddDays(number_of_nights);
+                        Console.WriteLine("Date :  " + check_outDate.ToString());
+
+
 
 
                         break;

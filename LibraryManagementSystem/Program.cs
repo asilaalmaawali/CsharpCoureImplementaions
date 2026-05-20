@@ -11,7 +11,7 @@ namespace LibraryManagementSystem
         static string MemName = "";
         static int MembID = 0;
         static string MemEmail = "";
-        static string membership_expiry_date = "";
+        static DateTime membership_expiry_date;
         static bool Memisregistered = false;  // whether a member is registered
         static string BoolTitle = "";  
         static string BookAuthor = "";
@@ -20,8 +20,8 @@ namespace LibraryManagementSystem
         static bool Bookisregistered = false;  // whether a book is registered
         static int total_books_borrowed = 0; //  total books borrowed this session
         static int TotalFinesPaid = 0; // total fines paid this session
-       
-
+        static bool checkResult = CheckisActive();   // inside it checking Memisregistered   , for if condition inside cases ( checkResult) , i declare it here to use it everywhere in cases
+        DateTime Today = DateTime.Now;  // for today date
 
         public static void PrintLMSMainMenu()  // no return , no parameters
         {
@@ -44,7 +44,58 @@ namespace LibraryManagementSystem
 
         }
 
+        public static bool CheckisActive()         // void — with parameters  ( true or false)
+        {
+            if (Memisregistered == true)   // if there is a member registered
+            {
+                Console.WriteLine("Member information already exists ");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+        }
+
+
+        public static void AddMemInformation()           // to add member information
+        {
+            Console.WriteLine("enter Member name:");
+            MemName = Console.ReadLine().Substring(5);
+            Console.WriteLine("enter Member email:");
+            MemEmail = Console.ReadLine();
+            DateTime Today = DateTime.Now;
+            membership_expiry_date = Today.AddDays(183); // 183 days in sex month , from today date after sex month will expired
+
+            Memisregistered = true;
+            Console.WriteLine("account information added successfully.");
+        }
+
+
+        public static void ViewMemberInfo()           // here to display member info
+        {
+            Memisregistered = true;
+            Console.WriteLine("Member name:    " + MemName.Substring(5).PadLeft(3)); 
+            Console.WriteLine("Member email:     " +MemEmail.PadLeft(3));                // PadLeft it adds spaces to the left side of the text, i do 3 spaces in begining for all.
+            DateTime Today = DateTime.Now;
+            Console.WriteLine("registered Date :      " + Today.ToString().PadLeft(3));
+            Console.WriteLine("membership expiry date :     "+ Today.AddDays(183).ToString().PadLeft(3));
+
+        }
+        //public static bool CheckisActive()         // void — with parameters  ( true or false)
+        //{
+        //    if (Memisregistered == true)   // if there is a member registered
+        //    {
+        //        Console.WriteLine("Member information already exists ");
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+
+        //}
 
 
         static void Main(string[] args)
@@ -60,15 +111,34 @@ namespace LibraryManagementSystem
                 switch (option)
                 {
                     case 0:                                                // 0. Register Member
+                        Console.WriteLine("===Register Member===");
 
+                        //bool checkResult = CheckisActive();   // inside it checking Memisregistered   // i declare above
+                        if (checkResult == false) //there is no account stored
+                        {
+                            AddMemInformation();
+                        }
 
                         break;
 
                     case 1:                                  // 1. Display Member Profile
 
+                        Console.WriteLine("===Display Member Profile===");
+                        if (checkResult == false) // if there is a member i will view the information 
+                        {
+                            ViewMemberInfo();
+                        }
+
                         break;
 
                     case 2:                                 //2. Search Book by Title
+                        //Console.WriteLine("==== Search Book by Title ====");
+
+
+
+
+
+
 
                         break;
 

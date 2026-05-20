@@ -192,7 +192,7 @@ namespace HotelManagementSystem
                                 Console.WriteLine("Check-In Date: " + check_inDate.ToString("dd/MM/yyyy HH:mm:ss")); // to convert date to string and specific format to show
                                 Console.WriteLine("Check-Out Date: " + check_outDate.ToString("dd/MM/yyyy HH:mm:ss"));
 
-                                Console.WriteLine(" Enter the Special note from guest :");  // here after he check-in , he can tell us the service note ( which time he want room service come or want he need)
+                                Console.WriteLine(" Enter the Special note from guest :");  // here after he check-in , he can tell us the service note ( which time he want room service come or what he need ( baby crib(baby bed) , Towels , )
                                 room_notes = Console.ReadLine();
 
 

@@ -1,6 +1,9 @@
-﻿using System.Diagnostics.Metrics;
+﻿using Microsoft.Win32;
+using System.Diagnostics.Metrics;
 using System.Net.NetworkInformation;
+using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -17,7 +20,7 @@ namespace LibraryManagementSystem
         static bool Memisregistered = false;  // whether a member is registered
         static string BookTitle = "";  
         static string BookAuthor = "";
-        static string book_genre = "";
+        static string book_genre = "";    // Advanture , Historical , fantasy , science
         static int available_copies = 0;   // number of available copies
         static bool Bookisregistered = false;  // whether a book is registered
         static int total_books_borrowed = 0; //  total books borrowed this session
@@ -83,8 +86,8 @@ namespace LibraryManagementSystem
 
         public static void ViewMemberInfo()           // here to display member info
         {
-            Memisregistered = true;
-            Console.WriteLine("Member name:    " + MemName.PadLeft(5)); 
+            
+            Console.WriteLine("Member name:    " + MemName.Length); 
             Console.WriteLine("Member email:     " +MemEmail.PadLeft(5));                // PadLeft it adds spaces to the left side of the text, i do 5 spaces in begining for all.
             Console.WriteLine("Member Tier :      " + Memtier.PadLeft(5));
             DateTime Today = DateTime.Now;
@@ -94,19 +97,19 @@ namespace LibraryManagementSystem
 
         }
 
-        public static bool CheckBisReg()      // here i want a return ( true or false)  , check if the book registered
-        {
-            if (Bookisregistered == true)   // if there is a book registered
-            {
-                Console.WriteLine("book already exists ");
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+        //public static bool CheckBisReg()      // here i want a return ( true or false)  , check if the book registered
+        //{
+        //    if (Bookisregistered == true)   // if there is a book registered
+        //    {
+        //        Console.WriteLine("book already exists ");
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
 
-        }
+        //}
 
 
         public static bool SearchBook(string keyword)            // i want to return if there a book or not
@@ -116,8 +119,49 @@ namespace LibraryManagementSystem
             
             return BookTitle.Contains(keyword);                 // containing function , whether a BookTitle contains a keyword.
         }
+        public static int Reduce(ref int available_copies)       // return (Reduce) the available copy count of the registered book by 1.  // ref mean we use orginal (available copy) and reduce it and save
+        {
+
+            
+            return Math.Max(0, available_copies - 1);          // to start from zero and above 
+        }
+        public static int Restore(ref int available_copies)       // return ( restore)  the available copy count of the registered book by 1.  // ref mean we use orginal (available copy) and restore it and save
+        {
+            return available_copies + 1;         //  it not go more than available copy
+        }
 
 
+        public static void RegBook(string BookTitle, string BookAuthor,int available_copies, string book_genre = "science")           // to Register book  // optional parameter  , i set book generation as default to science
+        {
+            Console.WriteLine("Enter a Book Title:");
+            BookTitle = Console.ReadLine().Trim();                  // read it without spaces
+            Console.WriteLine("Enter a Author Book:");
+            BookAuthor = Console.ReadLine().Trim();
+            Console.WriteLine("Enter a number of copies:");
+            available_copies = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter the Generation of a book:");
+            book_genre = Console.ReadLine();
+
+            Bookisregistered = true;
+            Console.WriteLine("Book added successfully.");
+
+
+
+        }
+
+
+        public static void BookDetails(string BookTitle, string BookAuthor , int available_copies , string book_genre)    // named parameters at call site
+        {
+          
+            Console.WriteLine("Book Title:   " +BookTitle.Length);
+            Console.WriteLine("Author Book:  " +BookAuthor.PadRight(10));
+            Console.WriteLine("Number of copies:       " +available_copies.ToString().PadRight(10));
+            Console.WriteLine("the Generation of a book:" +book_genre.PadRight(10));
+            
+        }
+
+
+       
         static void Main(string[] args)
         {
             bool exit = false;
@@ -144,7 +188,7 @@ namespace LibraryManagementSystem
                     case 1:                                  // 1. Display Member Profile
 
                         Console.WriteLine("===Display Member Profile===");
-                        if (CheckisActive() == false) // if there is a member i will view the information 
+                        if (CheckisActive() == true) // if there is a member i will view the information 
                         {
                             ViewMemberInfo();
                         }
@@ -172,22 +216,58 @@ namespace LibraryManagementSystem
 
                     case 3:                            // 3. Borrow a Book
 
-                    /*
-                     * 
-                     Reduce the available copy 
-                    count of the registered book 
-                    by 1. The function that 
-                    performs the reduction must 
-                    receive the copy count and 
-                    modify the original variable 
-                    in the caller — not a copy of 
-                    it. 
-                     * 
-                     * 
-                     * 
-                     */
+                        Console.WriteLine("==== Borrow a Book ====");
+                       
+                        if (Bookisregistered == true)   // if there is a book registered
+                        {
+
+
+                            Console.WriteLine("Number of available copies in library :   " + available_copies);
+                            if (available_copies > 0)
+
+                            {
+                                Reduce(ref available_copies);
+                                Console.WriteLine("available_copies after borrow :   " + Reduce(ref available_copies));
+                            }
+                            else
+                            {
+
+                                Console.WriteLine("The book is out the stock");
+                            }
+
+                        }
+                        else
+                        {
+
+                            Console.WriteLine("The book is not registered");
+                        }
+
+              
+
+                        break;
 
                     case 4:                            // 4. Return a Book 
+
+                        if (Bookisregistered == true)   // if there is a book registered
+                        {
+
+
+                            Console.WriteLine("Number of available copies in library :   " + available_copies);
+
+                            if (available_copies >= 0)
+
+                            {
+                                Restore(ref available_copies);
+                                //Console.WriteLine("available_copies after borrow :   " + Math.Min(available_copies, Restore(ref available_copies)));   // i mean if the available_copies =0 so i dont need to restore because it already sold out or out of the stock
+                                Console.WriteLine("available_copies after borrow :   " + Restore(ref available_copies));
+                            }
+                        
+                        }
+                        else
+                        {
+
+                            Console.WriteLine("The book is not registered");
+                        }
 
                         break;
                     case 5:                         //5. Calculate Late Fine 
@@ -208,7 +288,21 @@ namespace LibraryManagementSystem
                     case 8:                                  // 8. Register Book
 
 
+
+                        if (Bookisregistered == false) //there is no Book stored
+                        {
+                            RegBook(BookTitle,BookAuthor,available_copies,book_genre = " science");
+                        }
+                        else
+                        {
+                            Console.WriteLine("The book is already exists");
+                        }
+
                         break;
+
+
+
+                      
 
                     case 9:                                  // 9. Generate Member ID 
 
@@ -216,7 +310,19 @@ namespace LibraryManagementSystem
                         break;
 
                     case 10:                                  // 10. Display Book Details
+                        Console.WriteLine("==== Display Book Details ====");
 
+                        if (Bookisregistered== true)
+                        {
+                            BookDetails( BookTitle, BookAuthor , available_copies , book_genre);
+                            
+                            
+                        }
+                        else
+                        {
+
+                            Console.WriteLine("The book is not registered");
+                        }
 
                         break;
 

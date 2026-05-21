@@ -3,6 +3,7 @@ using System.Diagnostics.Metrics;
 using System.Net.NetworkInformation;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
+using System.Runtime;
 using System.Security.Cryptography;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -21,16 +22,17 @@ namespace LibraryManagementSystem
         static string BookTitle = "";  
         static string BookAuthor = "";
         static string book_genre = "";    // Advanture , Historical , fantasy , science
-        static int available_copies = 0;   // number of available copies
+        static int available_copies=0;   // number of available copies
         static bool Bookisregistered = false;  // whether a book is registered
         static int total_books_borrowed = 0; //  total books borrowed this session
         static int TotalFinesPaid = 0; // total fines paid this session
         //static bool checkResult = CheckisActive();   // inside it checking Memisregistered   , for if condition inside cases ( checkResult) , i declare it here to use it everywhere in cases  || IT CAUSED A CONFUSING ERROR
-        DateTime Today = DateTime.Now;  // for today date
+        static DateTime Today = DateTime.Now;  // for today date
         //static bool checkResultB = CheckBisReg();  // inside it checking Bookisregistered ,  for if condition inside cases ( checkResultB) 
-     
+        static int suscription_amount =0;
         static string keyword = "";
-
+        static int Overduedays = 0;
+        static double fineRate = 0;
 
         public static void PrintLMSMainMenu()  // no return , no parameters
         {
@@ -71,12 +73,25 @@ namespace LibraryManagementSystem
         public static void AddMemInformation()           // to add member information
         {
             Console.WriteLine("enter Member name:");
-            MemName = Console.ReadLine().Substring(0);   // i dont to delete any character in the name
+            MemName = Console.ReadLine().Substring(0);   // i dont delete any character in the name
             Console.WriteLine("enter Member email:");
             MemEmail = Console.ReadLine();
             Console.WriteLine("enter Member Tier:");
             Memtier = Console.ReadLine();
-            DateTime Today = DateTime.Now;
+            if (Memtier == "standard")
+            {
+               suscription_amount = 10;
+               Console.WriteLine(" standard suscription added successfully");
+            
+        }
+            else if (Memtier == "perimum")
+            {
+
+                suscription_amount = 30;
+                Console.WriteLine(" perimum suscription added successfully");
+            }
+
+            Today = DateTime.Now;
             membership_expiry_date = Today.AddDays(183); // 183 days in sex month , from today date after sex month will expired
 
             Memisregistered = true;
@@ -87,10 +102,10 @@ namespace LibraryManagementSystem
         public static void ViewMemberInfo()           // here to display member info
         {
             
-            Console.WriteLine("Member name:    " + MemName.Length); 
+            Console.WriteLine("Member name:    " + MemName); 
             Console.WriteLine("Member email:     " +MemEmail.PadLeft(5));                // PadLeft it adds spaces to the left side of the text, i do 5 spaces in begining for all.
             Console.WriteLine("Member Tier :      " + Memtier.PadLeft(5));
-            DateTime Today = DateTime.Now;
+            Today = DateTime.Now;
             Console.WriteLine("registered Date :      " + Today.ToString().PadLeft(5));
             Console.WriteLine("membership expiry date :     "+ Today.AddDays(183).ToString().PadLeft(5));
 
@@ -119,11 +134,12 @@ namespace LibraryManagementSystem
             
             return BookTitle.Contains(keyword);                 // containing function , whether a BookTitle contains a keyword.
         }
-        public static int Reduce(ref int available_copies)       // return (Reduce) the available copy count of the registered book by 1.  // ref mean we use orginal (available copy) and reduce it and save
+        public static int Reduce(ref int x)       // return (Reduce) the available copy count of the registered book by 1.  // ref mean we use orginal (available copy) and reduce it and save
         {
 
-            
-            return Math.Max(0, available_copies - 1);          // to start from zero and above 
+
+            return Math.Max(0, x - 1);          // to start from zero and above 
+           
         }
         public static int Restore(ref int available_copies)       // return ( restore)  the available copy count of the registered book by 1.  // ref mean we use orginal (available copy) and restore it and save
         {
@@ -131,8 +147,8 @@ namespace LibraryManagementSystem
         }
 
 
-        public static void RegBook(string BookTitle, string BookAuthor,int available_copies, string book_genre = "science")           // to Register book  // optional parameter  , i set book generation as default to science
-        {
+        public static void RegBook()           // to Register book  // optional parameter  , i set book generation as default to science
+        {        //string BookTitle, string BookAuthor,int available_copies, string book_genre = "science"
             Console.WriteLine("Enter a Book Title:");
             BookTitle = Console.ReadLine().Trim();                  // read it without spaces
             Console.WriteLine("Enter a Author Book:");
@@ -150,18 +166,25 @@ namespace LibraryManagementSystem
         }
 
 
-        public static void BookDetails(string BookTitle, string BookAuthor , int available_copies , string book_genre)    // named parameters at call site
-        {
-          
-            Console.WriteLine("Book Title:   " +BookTitle.Length);
+        public static void BookDetails()    // named parameters at call site
+        {                 //string BookTitle, string BookAuthor, int available_copies, string book_genre
+
+
+            Console.WriteLine("Book Title:   " +BookTitle);
             Console.WriteLine("Author Book:  " +BookAuthor.PadRight(10));
             Console.WriteLine("Number of copies:       " +available_copies.ToString().PadRight(10));
             Console.WriteLine("the Generation of a book:" +book_genre.PadRight(10));
             
         }
 
+        public static double LateFine(int OverdueDays)
+        {
+            
+            fineRate = Math.Sqrt(OverdueDays) * 2.5;  // 2.5 = fine rate
 
-       
+            return Math.Round(fineRate, 2);
+        }
+
         static void Main(string[] args)
         {
             bool exit = false;
@@ -257,6 +280,7 @@ namespace LibraryManagementSystem
                             if (available_copies >= 0)
 
                             {
+
                                 Restore(ref available_copies);
                                 //Console.WriteLine("available_copies after borrow :   " + Math.Min(available_copies, Restore(ref available_copies)));   // i mean if the available_copies =0 so i dont need to restore because it already sold out or out of the stock
                                 Console.WriteLine("available_copies after borrow :   " + Restore(ref available_copies));
@@ -271,6 +295,11 @@ namespace LibraryManagementSystem
 
                         break;
                     case 5:                         //5. Calculate Late Fine 
+
+                        Console.WriteLine("Enter overdue days:");
+                        int Overduedays = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Late Fine = " + LateFine(Overduedays));
 
                         break;
 
@@ -291,7 +320,7 @@ namespace LibraryManagementSystem
 
                         if (Bookisregistered == false) //there is no Book stored
                         {
-                            RegBook(BookTitle,BookAuthor,available_copies,book_genre = " science");
+                            RegBook();       // BookTitle,BookAuthor,available_copies,book_genre = " science"
                         }
                         else
                         {
@@ -314,9 +343,10 @@ namespace LibraryManagementSystem
 
                         if (Bookisregistered== true)
                         {
-                            BookDetails( BookTitle, BookAuthor , available_copies , book_genre);
-                            
-                            
+                            BookDetails();
+                           // BookTitle,BookAuthor,available_copies,book_genre
+
+
                         }
                         else
                         {
@@ -332,6 +362,18 @@ namespace LibraryManagementSystem
                         break;
 
                     case 12:                                // 12. Update Member Email 
+
+                        //if (Bookisregistered == true)
+                        //{
+
+
+
+
+                        //}
+
+
+
+
                         break;
 
 

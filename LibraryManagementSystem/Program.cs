@@ -84,11 +84,11 @@ namespace LibraryManagementSystem
                Console.WriteLine(" standard suscription added successfully");
             
         }
-            else if (Memtier == "perimum")
+            else if (Memtier == "premium")
             {
 
                 suscription_amount = 30;
-                Console.WriteLine(" perimum suscription added successfully");
+                Console.WriteLine(" premium suscription added successfully");
             }
 
             Today = DateTime.Now;
@@ -107,7 +107,7 @@ namespace LibraryManagementSystem
             Console.WriteLine("Member Tier :      " + Memtier.PadLeft(5));
             Today = DateTime.Now;
             Console.WriteLine("registered Date :      " + Today.ToString().PadLeft(5));
-            Console.WriteLine("membership expiry date :     "+ Today.AddDays(183).ToString().PadLeft(5));
+            Console.WriteLine("membership expiry date :     "+ membership_expiry_date.ToString().PadLeft(5));
 
 
         }
@@ -185,6 +185,39 @@ namespace LibraryManagementSystem
             return Math.Round(fineRate, 2);
         }
 
+        public static double ApplyDiscount(double amount)   // first version for apply discount -- discount for all 
+        {
+
+            double finalAmount = amount - (amount * 0.10);
+
+            return Math.Round(finalAmount, 2);
+
+
+        }
+
+        public static double ApplyDiscount(int suscription_amount, string Memtier)
+        {
+            double discount = 0;
+
+            Memtier = Memtier.ToUpper();
+
+            if (Memtier == "PREMIUM")
+            {
+                discount = 0.30;
+            }
+            else if (Memtier == "STANDARD")
+            {
+                discount = 0.10;
+            }
+
+            double finalAmount = suscription_amount - (suscription_amount * discount);
+
+            return Math.Round(finalAmount, 2);
+        }
+
+
+
+
         static void Main(string[] args)
         {
             bool exit = false;
@@ -231,7 +264,7 @@ namespace LibraryManagementSystem
                         }
                         else
                         {
-                            Console.WriteLine("The book is available");
+                            Console.WriteLine("The book is available:     " +BookTitle);
                         }
 
                         break;
@@ -295,7 +328,7 @@ namespace LibraryManagementSystem
 
                         break;
                     case 5:                         //5. Calculate Late Fine 
-
+                        Console.WriteLine("===Calculate Late Fine===");
                         Console.WriteLine("Enter overdue days:");
                         int Overduedays = int.Parse(Console.ReadLine());
 
@@ -305,6 +338,17 @@ namespace LibraryManagementSystem
 
 
                     case 6:                                  // 6. Apply Member Discount
+                  
+
+                        Console.WriteLine("===Apply Member Discount===");
+
+                        Console.WriteLine("Enter Member Tier:");
+                        Memtier = Console.ReadLine();
+
+                        Console.WriteLine("Enter Discount amount:");
+                        double discount = double.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Final Amount = " + ApplyDiscount(suscription_amount, Memtier));
 
 
                         break;

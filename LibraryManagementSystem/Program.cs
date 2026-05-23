@@ -31,7 +31,6 @@ namespace LibraryManagementSystem
         //static bool checkResultB = CheckBisReg();  // inside it checking Bookisregistered ,  for if condition inside cases ( checkResultB) 
         static int suscription_amount =0;
         static string keyword = "";
-        static int Overduedays = 0;
         static double fineRate = 0;
 
         public static void PrintLMSMainMenu()  // no return , no parameters
@@ -195,11 +194,11 @@ namespace LibraryManagementSystem
 
         }
 
-        public static double ApplyDiscount(int suscription_amount, string Memtier)
+        public static double ApplyDiscount(int suscription_amount, string Memtier)   // here every suscription have a different discount
         {
             double discount = 0;
 
-            Memtier = Memtier.ToUpper();
+            Memtier = Memtier.ToUpper();  // to convert member tier tp upper case
 
             if (Memtier == "PREMIUM")
             {
@@ -210,15 +209,14 @@ namespace LibraryManagementSystem
                 discount = 0.10;
             }
 
-            double finalAmount = suscription_amount - (suscription_amount * discount);
+            double finalAmount = suscription_amount - (suscription_amount * discount);  // i already in above give every suscription a price so here i need just to apply discount
 
-            return Math.Round(finalAmount, 2);
+            return Math.Round(finalAmount, 2);           // i want to return final amount
+
         }
 
 
-
-
-        static void Main(string[] args)
+            static void Main(string[] args)
         {
             bool exit = false;
             while (exit == false)
@@ -357,21 +355,40 @@ namespace LibraryManagementSystem
 
 
                     case 6:                                  // 6. Apply Member Discount
-                  
 
-                        Console.WriteLine("===Apply Member Discount===");
 
-                        Console.WriteLine("Enter Member Tier:");
-                        Memtier = Console.ReadLine();
+                        Console.WriteLine("=== Apply Discount ===");  
+                        Console.WriteLine("1. Default Discount (5%)");        // i decide to use choosee here to be not conflict togather
+                        Console.WriteLine("2. Member Discount (Standard/Premium)");
+                        Console.WriteLine("Choose option:");
 
-                        Console.WriteLine("Enter Discount amount:");
-                        double discount = double.Parse(Console.ReadLine());
+                        int choice = int.Parse(Console.ReadLine());
 
-                        Console.WriteLine("Final Amount = " + ApplyDiscount(suscription_amount, Memtier));
+                        if (choice == 1)
+                        {                                                        // here discount for all i dont mention if its for standard or premium
 
+                            Console.WriteLine("Enter subscription amount:");
+                            double amount = double.Parse(Console.ReadLine());
+
+                            Console.WriteLine("Final Amount = " + ApplyDiscount(amount));
+                        }
+                        else if (choice == 2)             // here the discount for standard or premium , i already give a price for these suscription in the above , here just i can mention which suscription and immediatly to the discount
+                        {
+                            Console.WriteLine("Enter Member Tier (standard/premium):");
+                            Memtier = Console.ReadLine();
+
+                            Console.WriteLine("Final Amount = " + ApplyDiscount(suscription_amount, Memtier));
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid option");
+                        }
 
                         break;
+                        
 
+                        
                     case 7:                                  // 7. Check Borrowing Eligibility
 
 

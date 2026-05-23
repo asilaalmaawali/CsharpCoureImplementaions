@@ -329,10 +329,29 @@ namespace LibraryManagementSystem
                         break;
                     case 5:                         //5. Calculate Late Fine 
                         Console.WriteLine("===Calculate Late Fine===");
-                        Console.WriteLine("Enter overdue days:");
-                        int Overduedays = int.Parse(Console.ReadLine());
 
-                        Console.WriteLine("Late Fine = " + LateFine(Overduedays));
+
+                        Console.WriteLine("Enter borrow date (yyyy-mm-dd):");    // here we enter the borrow date
+                        DateTime borrowDate = DateTime.Parse(Console.ReadLine());
+
+                        int allowedDays = 5;  // allowed period to borrow
+
+                        DateTime dueDate = borrowDate.AddDays(allowedDays);   // i calculate the due date , the date should return the book
+
+                        Today = DateTime.Now;  // give us today date
+
+                        int OverdueDays = (Today - dueDate).Days;  //calculate the overdue
+
+
+                        if (OverdueDays > 0)     // if overdue more than 0 , here we start to calculate the fine
+                        {
+                            Console.WriteLine("Overdue Days: " + OverdueDays);
+                            Console.WriteLine("Late Fine :  " + LateFine(OverdueDays));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Book returned on time");
+                        }
 
                         break;
 

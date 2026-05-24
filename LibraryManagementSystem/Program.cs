@@ -14,7 +14,7 @@ namespace LibraryManagementSystem
     {
         // Storage system
         static string MemName = "";
-        static int MembID = 0;
+        static string MembID = "";
         static string MemEmail = "";
         static string Memtier = "";
         static DateTime membership_expiry_date;
@@ -225,6 +225,17 @@ namespace LibraryManagementSystem
             
 
             return expiry >= DateTime.Today;
+        }
+
+        public static string GenerateMemberID()
+        {
+            string namePart = MemName.Substring(0, 3).ToUpper();    // here i want to take just 3 letter from the name and in upper case
+
+            double timeValue = Math.Sqrt(DateTime.Now.Ticks);   // give me a unique number based on current time (DateTime.Now.Ticks)
+
+            MembID = namePart + ((int)timeValue).ToString();    // i convert double to int to removing the decimal part  , combine namepart and time value togather to create a member ID
+
+            return MembID;
         }
 
         static void Main(string[] args)
@@ -440,8 +451,15 @@ namespace LibraryManagementSystem
 
                     case 9:                                  // 9. Generate Member ID 
 
+                   
+
+                        Console.WriteLine("=== Generate Member ID ===");
+
+                        Console.WriteLine("Generated Member ID: " + GenerateMemberID());  // i call the function for generate ID .
 
                         break;
+
+                       
 
                     case 10:                                  // 10. Display Book Details
                         Console.WriteLine("==== Display Book Details ====");

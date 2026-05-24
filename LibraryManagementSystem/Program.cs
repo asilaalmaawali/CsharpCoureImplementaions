@@ -238,6 +238,19 @@ namespace LibraryManagementSystem
             return MembID;
         }
 
+
+        public static bool UpMemberEmail(string newEmail, out string validatedEmail)  // return true or false for new email and also store email into validatedEmail
+        {
+            validatedEmail = newEmail.Trim();
+
+            if (validatedEmail.Length < 5)
+                return false;
+
+            if (!validatedEmail.Contains("@"))   // should contain (@)
+                return false;
+
+            return true;
+        }
         static void Main(string[] args)
         {
             bool exit = false;
@@ -486,16 +499,24 @@ namespace LibraryManagementSystem
 
                     case 12:                                // 12. Update Member Email 
 
-                        //if (Bookisregistered == true)
-                        //{
+                        Console.WriteLine("=== Update Member Email ===");
 
+                        Console.WriteLine("enter Member email:");
+                        string newEmail = Console.ReadLine();
 
+                        string validatedEmail;
 
+                        bool isValid = UpMemberEmail(newEmail, out validatedEmail);
 
-                        //}
-
-
-
+                        if (isValid)
+                        {
+                            MemEmail = validatedEmail;
+                            Console.WriteLine("Email updated successfully: " + MemEmail);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid email format.");
+                        }
 
                         break;
 

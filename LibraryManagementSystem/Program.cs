@@ -32,6 +32,7 @@ namespace LibraryManagementSystem
         static int suscription_amount =0;
         static string keyword = "";
         static double fineRate = 0;
+        static string expiryDate = "";
 
         public static void PrintLMSMainMenu()  // no return , no parameters
         {
@@ -215,8 +216,18 @@ namespace LibraryManagementSystem
 
         }
 
+        public static bool ChkBorrowingEligibility(string expiryDate)   // here i want another variable for expiry date and be string
+        {
+            Console.WriteLine("Enter membership expiry date (yyyy-mm-dd):");
+            expiryDate = Console.ReadLine();
 
-            static void Main(string[] args)
+            DateTime expiry = DateTime.Parse(expiryDate);    // converted to data time
+            
+
+            return expiry >= DateTime.Today;
+        }
+
+        static void Main(string[] args)
         {
             bool exit = false;
             while (exit == false)
@@ -391,8 +402,22 @@ namespace LibraryManagementSystem
                         
                     case 7:                                  // 7. Check Borrowing Eligibility
 
+                        Console.WriteLine("=== Check Borrowing Eligibility ===");
+
+                        bool eligible = ChkBorrowingEligibility(expiryDate);
+
+                        if (eligible)
+                        {
+                            Console.WriteLine("Member is eligible to borrow books.");            // here to check if membership still active or not , if not the member cannot borrow book
+                        }
+                        else
+                        {
+                            Console.WriteLine("Membership expired. Cannot borrow books.");
+                        }
 
                         break;
+
+                       
 
                     case 8:                                  // 8. Register Book
 

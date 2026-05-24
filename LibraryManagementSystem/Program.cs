@@ -6,6 +6,7 @@ using System.Reflection.PortableExecutable;
 using System.Runtime;
 using System.Security.Cryptography;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace LibraryManagementSystem
@@ -25,7 +26,7 @@ namespace LibraryManagementSystem
         static int available_copies=0;   // number of available copies
         static bool Bookisregistered = false;  // whether a book is registered
         static int total_books_borrowed = 0; //  total books borrowed this session
-        static int TotalFinesPaid = 0; // total fines paid this session
+        static double TotalFinesPaid = 0; // total fines paid this session
         //static bool checkResult = CheckisActive();   // inside it checking Memisregistered   , for if condition inside cases ( checkResult) , i declare it here to use it everywhere in cases  || IT CAUSED A CONFUSING ERROR
         static DateTime Today = DateTime.Now;  // for today date
         //static bool checkResultB = CheckBisReg();  // inside it checking Bookisregistered ,  for if condition inside cases ( checkResultB) 
@@ -272,7 +273,19 @@ namespace LibraryManagementSystem
         }
 
 
+        public static void SessionSummary()
+        {
+            Console.WriteLine("=== Session Summary ===");
 
+            Console.WriteLine("Member Name: " + MemName);
+
+            Console.WriteLine("Total Books Borrowed: " + total_books_borrowed);
+
+            Console.WriteLine("Total Fines Paid: " + Math.Round(TotalFinesPaid, 2));
+
+            DateTime now = DateTime.Now;
+            Console.WriteLine("Current Date & Time: " + Convert.ToString(now));
+        }
 
 
 
@@ -341,6 +354,7 @@ namespace LibraryManagementSystem
 
                             {
                                 Reduce(ref available_copies);
+                                total_books_borrowed++; 
                                 Console.WriteLine("available_copies after borrow :   " + Reduce(ref available_copies));
                             }
                             else
@@ -387,7 +401,7 @@ namespace LibraryManagementSystem
                         break;
                     case 5:                         //5. Calculate Late Fine 
                         Console.WriteLine("===Calculate Late Fine===");
-
+                            
 
                         Console.WriteLine("Enter borrow date (yyyy-mm-dd):");    // here we enter the borrow date
                         DateTime borrowDate = DateTime.Parse(Console.ReadLine());
@@ -405,11 +419,14 @@ namespace LibraryManagementSystem
                         {
                             Console.WriteLine("Overdue Days: " + OverdueDays);
                             Console.WriteLine("Late Fine :  " + LateFine(OverdueDays));
+
+                            TotalFinesPaid += fineRate;  // to store it
                         }
                         else
                         {
                             Console.WriteLine("Book returned on time");
                         }
+                        
 
                         break;
 
@@ -569,6 +586,8 @@ namespace LibraryManagementSystem
 
 
                     case 13:                                // 13. Session Summary
+                       
+                        SessionSummary();
                         break;
 
                     case 14:

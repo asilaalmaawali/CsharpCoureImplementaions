@@ -251,6 +251,31 @@ namespace LibraryManagementSystem
 
             return true;
         }
+
+        public static double CalculateRenewalFee(int days, double subscriptionAmount)  //for standard      // here i use overloading becuase i want to verison of function
+        {
+            double total = days * subscriptionAmount;
+
+            return Math.Ceiling(total);      // rounds up no decimal
+        }
+
+        public static double CalculateRenewalFee(int days, int suscription_amount, bool isPremium)  // for premium
+        {
+            double total = days * suscription_amount;
+
+            if (isPremium)
+            {
+                total = total / 2;   // premium gets 50% discount
+            }
+
+            return Math.Ceiling(total);   // rounds up no decimal
+        }
+
+
+
+
+
+
         static void Main(string[] args)
         {
             bool exit = false;
@@ -495,7 +520,28 @@ namespace LibraryManagementSystem
                     case 11:                                  // 11. Calculate Renewal Fee
 
 
+                        Console.WriteLine("Enter renewal days:");
+                        int days = int.Parse(Console.ReadLine());
+
+                        Console.WriteLine("Are you premium member? (true/false):");
+                        bool isPremium = bool.Parse(Console.ReadLine());
+
+                        double fee;
+
+                        if (isPremium)
+                        {
+                            fee = CalculateRenewalFee(days, suscription_amount, true);   // here i call function for preimum
+                        }
+                        else
+                        {
+                            fee = CalculateRenewalFee(days, suscription_amount);      // for standard
+                        }
+
+                        Console.WriteLine("Renewal Fee: " + fee);
+
                         break;
+
+                        
 
                     case 12:                                // 12. Update Member Email 
 

@@ -3,4 +3,5 @@
   <Project Path="Collections/Collections.csproj" Id="d159dc66-f137-4225-92d4-7f95cb429265" />
   <Project Path="HotelManagementSystem/HotelManagementSystem.csproj" Id="7a1c48c0-da57-4abb-a5e9-c2cf10ffa196" />
   <Project Path="LibraryManagementSystem/LibraryManagementSystem.csproj" Id="42c4cdf3-91f6-4ed8-afe1-535b7d6f6d14" />
+  <Project Path="Lists/Lists.csproj" Id="f44083a6-9465-4fc8-a34d-fbe769beab2e" />
 </Solution>

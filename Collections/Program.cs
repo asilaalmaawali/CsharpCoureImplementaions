@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Timers;
 
-namespace Collections
+namespace Collections            // for Array Task
 {
     internal class Program
     {

@@ -18,6 +18,38 @@
             Console.WriteLine("Total number of readings: " + temperatures.Count);    // length of temperatures 
 
             Console.WriteLine("=============================");   // to order the output
+
+            ////////////// Problem 2: Student Score Board  
+
+                
+            List <int> scores = new List<int> () { 0, 30, 50, 70, 90, 100 }; // list declare and initialization 
+            Console.WriteLine("scores: ");
+            foreach (int score in scores)  // goes through each value in scores list , regarding to index i use another name (score)
+            {
+
+                Console.WriteLine(score);
+            }
+
+            Console.WriteLine("--Reversed--");
+
+            scores.Reverse();     // to reverse the scores , not be in order   , reverse in list
+
+            foreach (int score in scores)              // to print the reverse 
+            {
+                Console.WriteLine(score);
+            }
+            Console.WriteLine("=============================");   // to order the output
+
+
+
+
+
+
+
+
+
+
+
         }
     }
 }

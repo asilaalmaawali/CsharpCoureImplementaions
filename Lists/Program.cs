@@ -148,7 +148,42 @@
                 Console.WriteLine("Quantity not found");
             }
 
+            Console.WriteLine("=============================");   // to order the output
 
+            // Problem 7: Library Book Shelf Scanner 
+
+            List<int> copies = new List<int>() { 4, 5, 6, 7, 8, 9, 10, 2, 1 };  // Declare and initialize 
+            Console.WriteLine("copy counts in original order");
+
+            foreach (int copycount in copies)
+            {
+                Console.WriteLine(copycount);              // to print in original order
+            }
+
+            copies.Sort();
+            Console.WriteLine("copy counts in sorted order");
+            foreach (int copycount in copies)
+            {
+                Console.WriteLine(copycount);                    // to print in sorted order
+            }
+
+            int maxCopies = copies[8];  // the biggest number is 10 after sorting , so when i want the last number for index (size 9-1 =8) so last index 8
+            Console.WriteLine("max copies is :  " + maxCopies);
+
+
+            for (int i = 0; i < copies.Count; i++)          // for loop to go through every copyies one by one
+            {
+                if (copies[i] == 0)            // if there is copyies list = 0 they will print zero exists in the array
+                {
+                    Console.WriteLine("A zero exists in the array");
+                    break;
+                }
+
+                if (i == copies.Count - 1)      // if it reach to last copyies list without finding 0 so will print not found
+                {
+                    Console.WriteLine("No zero found in the array");
+                }
+            }
 
         }
     }

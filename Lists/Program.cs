@@ -63,7 +63,31 @@
                 Console.WriteLine("Item found at index: " + index); // 2 will find it in index 2 
             }
 
+            // Medium
 
+            Console.WriteLine("=============================");   // to order the output
+            //////////////// Problem 4: Race Finish Times 
+
+           
+            List<int> finishTimes = new List<int>() { 45, 32, 58, 27, 41, 63, 36, 50 }; // declare and initialize
+
+            Console.WriteLine("finish Times in unsorted times :");
+            foreach (int time in finishTimes)              // to print unsorted times 
+            {
+                Console.WriteLine(time);
+            }
+           
+            finishTimes.Sort(); // sorting in list
+
+            Console.WriteLine("finish Times in sorted time:");
+            foreach (int time in finishTimes)              // to print sorted time
+            {
+                Console.WriteLine(time);
+            }
+
+            Console.WriteLine("Number of participants: " + finishTimes.Count);
+
+            Console.WriteLine("=============================");   // to order the output
 
 
 

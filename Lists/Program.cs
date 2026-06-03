@@ -118,6 +118,35 @@
             Console.WriteLine("=============================");   // to order the output
 
 
+            /// Problem 6: Warehouse Inventory Check 
+
+ 
+            List<int> quantities = new List<int>() { 42, 17, 9, 55, 28, 36, 14, 61 }; // Declare and initialize an list with 8 integer quantity values.
+
+            int totalStock = 0;    // start the sum at zero
+
+            for (int i = 0; i < quantities.Count; i++)
+            {
+                totalStock = totalStock + quantities[i];                // Calculate total stock
+            }
+
+            Console.WriteLine("Total stock: " + totalStock);
+
+            double averageStock = (double)totalStock / quantities.Count;   // converts totalStock from int to decimal number (double).  //Calculate average using .Length
+            Console.WriteLine("Average stock per slot: " + averageStock);
+
+
+            int ii = quantities.IndexOf(36);   // search index for (36) quantity  
+
+            Console.WriteLine("==Result of quantity Search==");
+            if (ii != -1)                                     // if there is or not
+            {
+                Console.WriteLine("Quantity found at index: " + ii);  // ii mean index to not conflict with others index
+            }
+            else
+            {
+                Console.WriteLine("Quantity not found");
+            }
 
 
 

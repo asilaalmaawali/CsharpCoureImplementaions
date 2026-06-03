@@ -1,4 +1,6 @@
-﻿namespace Collections
+﻿using System.Timers;
+
+namespace Collections
 {
     internal class Program
     {
@@ -59,8 +61,55 @@
             {
                 Console.WriteLine("Item found at index: " + index); // 2 will find it in index 2 
             }
+            // Medium
+            //////////////// Problem 4: Race Finish Times 
 
-    
+            int [] finishTimes = new int[8] { 45, 32, 58, 27, 41, 63, 36, 50 }; // Declare and initialize
+
+
+            Console.WriteLine("finish Times in unsorted times :");
+            foreach (int time in finishTimes)              // to print unsorted times 
+            {
+                Console.WriteLine(time);
+            }
+
+            finishTimes.Sort();
+            Console.WriteLine("finish Times in sorted time:");
+            foreach (int time in finishTimes)              // to print sorted time
+            {
+                Console.WriteLine(time);
+            }
+
+            Console.WriteLine("Number of participants: " + finishTimes.Length);
+
+
+            /////  Problem 5: Classroom Grade Report 
+
+            int[] grades = new int[10] { 85, 92, 78, 64, 88, 95, 73, 81, 69, 90 }; // Declare and initialize
+
+            grades.Sort();
+            Console.WriteLine("Sorted grades: ");
+            foreach (int grade in grades)              // to print sorted grades
+            {
+                Console.WriteLine(grade);
+            }
+
+            grades.Reverse();
+
+            Console.WriteLine("Reverse grades: ");
+            foreach (int grade in grades)              // to print sorted grades
+            {
+                Console.WriteLine(grade);
+            }
+
+            for (int i = 0; i < grades.Length; i++)       // for loop and indexing
+            {
+
+                Console.WriteLine("Rank " + (i + 1) + ": " + grades[i]);   // indexing
+
+
+            }
+
         }
     }
 }

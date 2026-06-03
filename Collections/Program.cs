@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System.Drawing;
+using System.Timers;
 
 namespace Collections
 {
@@ -74,8 +75,7 @@ namespace Collections
             {
                 Console.WriteLine(time);
             }
-
-            finishTimes.Sort();
+            Array.Sort(finishTimes);
             Console.WriteLine("finish Times in sorted time:");
             foreach (int time in finishTimes)              // to print sorted time
             {
@@ -89,14 +89,14 @@ namespace Collections
 
             int[] grades = new int[10] { 85, 92, 78, 64, 88, 95, 73, 81, 69, 90 }; // Declare and initialize
 
-            grades.Sort();
+            Array.Sort(grades);
             Console.WriteLine("Sorted grades: ");
             foreach (int grade in grades)              // to print sorted grades
             {
                 Console.WriteLine(grade);
             }
 
-            grades.Reverse();
+            Array.Reverse(grades);
 
             Console.WriteLine("Reverse grades: ");
             foreach (int grade in grades)              // to print sorted grades
@@ -141,8 +141,43 @@ namespace Collections
             }
 
 
+            Console.WriteLine("=============================");   // to order the output
+            // Problem 7: Library Book Shelf Scanner 
+
+            int[] copies = new int[9] {4,5,6,7,8,9,10,2,1};   // Declare and initialize 
+
+            Console.WriteLine("copy counts in original order");
+           
+            foreach (int copycount in copies)            
+            {
+                Console.WriteLine(copycount);              // to print in original order
+            }
+
+            Array.Sort(copies);
+            Console.WriteLine("copy counts in sorted order");
+            foreach (int copycount in copies)
+            {
+                Console.WriteLine(copycount);                    // to print in sorted order
+            }
+
+            int maxCopies = copies[8];  // the biggest number is 10 after sorting , so when i want the last number for index (size 9-1 =8) so last index 8
+            Console.WriteLine("max copies is :  " +maxCopies);
 
 
+            for (int i = 0; i < copies.Length; i++)          // for loop to go through every copyies one by one
+            {
+                if (copies[i] == 0)            // if there is copyies array = 0 they will print zero exists in the array
+                {
+                    Console.WriteLine("A zero exists in the array");
+                    break;
+                }
+
+                if (i == copies.Length -1)      // if it reach to last copyies array without finding 0 so will print not found
+                {
+                    Console.WriteLine("No zero found in the array");
+                }
+            }
+            
         }
     }
 }

@@ -41,6 +41,27 @@
             Console.WriteLine("=============================");   // to order the output
 
 
+            ////////// Problem 3: Product Price Finder 
+
+
+            List <double> Prices = new List<double> () { 1.5, 2, 3.5, 4.4, 5 }; // declare and initialize for prices list 
+            for (int i = 0; i < Prices.Count; i++)       // for loop and indexing
+            {
+
+                Console.WriteLine("Product " + (i + 1) + ": " + Prices[i]);   // indexing
+
+            }
+
+
+            int index = Prices.IndexOf(2);     // search for position of a value  , instead of using array.indexOf in array , here i use indexof function   prices.indexOf()
+            if (index == -1)             // if not their will print its not found
+            {
+                Console.WriteLine("Item not found in the array");
+            }
+            else
+            {
+                Console.WriteLine("Item found at index: " + index); // 2 will find it in index 2 
+            }
 
 
 

@@ -154,7 +154,45 @@
                 Console.WriteLine(undo);  //  print after removing the middle one ("Format text")
 
             }
-            Console.WriteLine("Final number of remaining actions: " + undoStack.Count); 
+            Console.WriteLine("Final number of remaining actions: " + undoStack.Count);
+            Console.WriteLine("======================================");
+            // Problem 4: Hospital Emergency Room Triage 
+
+            Queue<string> triageQueue = new Queue<string>();
+
+            //  Enqueue 8 hardcoded patient names. 
+
+            triageQueue.Enqueue("Sara");
+            triageQueue.Enqueue("Ahmed");
+            triageQueue.Enqueue("Asila");
+            triageQueue.Enqueue("Budoor");
+            triageQueue.Enqueue("Ammar");
+            triageQueue.Enqueue("Emad");
+            triageQueue.Enqueue("Asad");
+
+
+            int position = 1;
+
+            foreach (string patient in triageQueue)
+            {
+                Console.WriteLine("Position" +position +" : "+ patient);
+                position++;
+            }
+            Console.WriteLine("---------------------------------------");
+
+            Console.WriteLine("Next patient to be seen: " + triageQueue.Peek());   //  Peek to show who will be seen next.
+
+            Console.WriteLine("---------------------------------------");
+
+            for (int i = 0; i < 3; i++)  //  (dequeue) the first 3 patients and display each name as they are seen.
+            {
+                string patient = triageQueue.Dequeue();  // to remove
+                Console.WriteLine("Patient seen:" +patient);
+            }
+
+
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Remaining queue: " + triageQueue.Count);
 
 
         }

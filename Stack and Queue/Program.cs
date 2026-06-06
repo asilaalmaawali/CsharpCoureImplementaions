@@ -98,8 +98,63 @@
                 Console.WriteLine("Omar is not in the check-in queue");
             }
 
-            Console.WriteLine("Total guests still in queue: " + checkInQueue.Count);   
+            Console.WriteLine("Total guests still in queue: " + checkInQueue.Count);
 
+            Console.WriteLine("=========================================================");
+            //Medium
+            // Problem 3: Text Editor Undo System 
+
+            Stack<string> undoStack = new Stack<string>();
+
+            //// stores action descriptions in the order they were performed
+
+            undoStack.Push("Type text");
+            undoStack.Push("Delete text");
+            undoStack.Push("Format text");
+            undoStack.Push("Insert image");
+            undoStack.Push("Copy text");
+            undoStack.Push("Paste text");
+            undoStack.Push("Save file");
+
+            foreach (string undo in undoStack)
+            {
+
+                Console.WriteLine(undo);  //  display all
+
+            }
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("undone next:  " + undoStack.Peek());  // show which action would be undone next
+
+
+            Console.WriteLine("Undo: " + undoStack.Pop());  // to remove and print
+            Console.WriteLine("Undo: " + undoStack.Pop());
+            Console.WriteLine("-------------------------");
+            foreach (string undo in undoStack)
+            {
+
+                Console.WriteLine(undo);  //  display remaining undo history         // before also removing the middle one
+
+            }
+
+            Console.WriteLine("-------------------------");
+
+            Stack<string> tempStack = new Stack<string>(); //Temporary stack 
+           
+
+            tempStack.Push(undoStack.Pop());     // delete ir from undoStack and store it in tempStack  // (remove "Copy text")
+            tempStack.Push(undoStack.Pop());      // (remove "Insert image")
+            undoStack.Pop(); //(remove "Format text") without saving it in any place
+
+            undoStack.Push(tempStack.Pop());  // here now i add "Copy text" again in undoStack and remove it from tempStack
+            undoStack.Push(tempStack.Pop());  // here now i add "Insert image" again in undoStack and remove it from tempStack
+
+            foreach (string undo in undoStack)
+            {
+
+                Console.WriteLine(undo);  //  print after removing the middle one ("Format text")
+
+            }
+            Console.WriteLine("Final number of remaining actions: " + undoStack.Count); 
 
 
         }

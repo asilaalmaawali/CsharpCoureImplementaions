@@ -51,6 +51,56 @@
 
             Console.WriteLine("=========================================================");
 
+            // Problem 2: Hotel Check-In Queue
+
+
+            Queue <string> checkInQueue = new Queue<string>();
+
+            // 5 hardcoded guest names
+
+            checkInQueue.Enqueue("Asila");     // first
+            checkInQueue.Enqueue("Noor");
+            checkInQueue.Enqueue("Suad");
+            checkInQueue.Enqueue("Hilal");
+            checkInQueue.Enqueue("Hamed");    // last
+
+            foreach (string name in checkInQueue)
+            {
+
+
+                Console.WriteLine(name);  //  Display all waiting guests in order
+
+            }
+
+            Console.WriteLine("next guest in check-in queue: " + checkInQueue.Peek()); // use Peek to display who is next without removing them from the queue
+
+            Console.WriteLine("Served: " + checkInQueue.Dequeue());    // remove and print
+            Console.WriteLine("Served: " + checkInQueue.Dequeue());
+
+
+            Console.WriteLine("After serving :  ");
+
+            foreach (string name in checkInQueue)
+            {
+
+                Console.WriteLine(name);  //  display after serving.
+
+            }
+
+            bool isWaiting = checkInQueue.Contains("omar");    // here i want to try if the name not their
+
+            if (isWaiting)
+            {
+                Console.WriteLine("Omar is still waiting in the check-in queue");
+            }
+            else
+            {
+                Console.WriteLine("Omar is not in the check-in queue");
+            }
+
+            Console.WriteLine("Total guests still in queue: " + checkInQueue.Count);   
+
+
 
         }
     }

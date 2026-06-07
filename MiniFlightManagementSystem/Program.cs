@@ -1,4 +1,7 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MiniFlightManagementSystem
 {
@@ -14,14 +17,14 @@ namespace MiniFlightManagementSystem
         static Dictionary<int,string> bookingRecord = new Dictionary<int,string>(); //  Key = ticketNumber, Value = flightNumber+date (e.g.'OA101|12-Jan-2026')
         static Queue <int> checkedInQueue = new Queue <int>();
         static Stack <int> boardingStack = new Stack <int>();
-        static List<int> cancelledTickets = new List<int>();
+        static List<string> cancelledTickets = new List<string>();
         static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
-
-
+        static string passengerName;
+        static string ticketID;
         //static passengerNames.AddRange(new string[] {});
         public static void AddPassenger()
         {
-            string passengerName;
+            //string passengerName;
             Console.Write("Enter the new passenger full name: ");
             passengerName = Console.ReadLine().Trim();  // without spaces
     
@@ -42,14 +45,51 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine("Passenger added successfully");
             }
 
-            string ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
+            ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
             ticketNumbers.Add(ticketID);  // to add it
 
             Console.WriteLine("Passenger added successfully");
             Console.WriteLine(passengerName +"  "+ ticketID);  // to print passenger name and their assigned ticket ID
         }
 
-        
+        public static void ViewPassenger()
+        {
+
+
+            if (passengerName == "")
+            {
+                Console.WriteLine(" 'No passengers registered yet");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("No.|Passenger Name |Ticket ID|  Status");
+                
+            }
+
+            string status;
+            for (int i = 0; i < passengerNames.Count; i++)
+            {
+
+                if (cancelledTickets.Contains(ticketNumbers[i]))
+
+                {
+                    status = "CANCELLED";
+
+                }
+                else
+                {
+
+                    status = "ACTIVE";
+
+                }
+
+                Console.WriteLine("{0,-4} {1,-15} {2,-10} {3}" ,i ,passengerNames[i] ,ticketNumbers[i] ,status);  // i do spaces first to be organized
+
+            }
+                Console.WriteLine("total passenger count:   " + passengerName.Count());
+
+        }
 
         static void Main(string[] args)
         {
@@ -84,11 +124,15 @@ namespace MiniFlightManagementSystem
 
 
                     case 2:                               // View All Passengers
+                        ViewPassenger();
+
                         break;
 
 
 
                     case 3:                              //  Book a Flight Ticket
+
+
                         break;
 
 

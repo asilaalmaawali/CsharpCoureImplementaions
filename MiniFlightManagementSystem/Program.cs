@@ -1,4 +1,5 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -12,16 +13,17 @@ namespace MiniFlightManagementSystem
 
         static List <string> passengerNames = new List<string> (5);
         static List <string> ticketNumbers = new List<string> (5);
-        static string[] flightNumbers = new string[6];
-        static List<string> availableDates = new List<string>(4);
-        static Dictionary<int,string> bookingRecord = new Dictionary<int,string>(); //  Key = ticketNumber, Value = flightNumber+date (e.g.'OA101|12-Jan-2026')
+        static string[] flightNumbers = new string[6] { "OA101", "OA102", "OA103" , "OA104" , "OA105" , "OA106" };
+        static List<string> availableDates = new List<string>(4){"7-June-2026", "8-June-2026", "9-June-2026", "10-June-2026" };
+        static Dictionary<string,string> bookingRecord = new Dictionary<string,string>(); //  Key = ticketNumber, Value = flightNumber+date (e.g.'OA101|12-Jan-2026')
         static Queue <int> checkedInQueue = new Queue <int>();
         static Stack <int> boardingStack = new Stack <int>();
         static List<string> cancelledTickets = new List<string>();
         static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
         static string passengerName;
         static string ticketID;
-        //static passengerNames.AddRange(new string[] {});
+        static string status;
+       
         public static void AddPassenger()
         {
             //string passengerName;
@@ -67,7 +69,7 @@ namespace MiniFlightManagementSystem
                 
             }
 
-            string status;
+            //string status;
             for (int i = 0; i < passengerNames.Count; i++)
             {
 
@@ -87,9 +89,86 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine("{0,-4} {1,-15} {2,-10} {3}" ,i ,passengerNames[i] ,ticketNumbers[i] ,status);  // i do spaces first to be organized
 
             }
-                Console.WriteLine("total passenger count:   " + passengerName.Count());
+                Console.WriteLine("total passenger count:   " + passengerNames.Count);
 
         }
+
+      
+        public static void BookingTicket()
+        {
+            Console.Write("Enter Ticket ID:  ");
+            ticketID = Console.ReadLine().Trim();
+
+            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            {
+
+                Console.WriteLine("The Ticket not exists yet");
+                return;
+            }
+            else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+            {
+                Console.WriteLine("Ticket is already cancelled");
+                return;
+            }
+
+
+            if (bookingRecord.ContainsKey(ticketID))   // to check key
+            {
+                Console.WriteLine("Ticket already has a booking ");
+                return;
+            }
+
+        
+            Console.WriteLine("Select a flight:  ");
+
+            for (int i = 0; i < flightNumbers.Length; i++)
+            {
+                Console.WriteLine(i + "     " + flightNumbers[i]);
+            }
+
+            Console.Write("enter flight index: ");
+            int Flightindex = int.Parse(Console.ReadLine());   // select a flight by entering index number
+
+       
+            if (Flightindex < 0 || Flightindex >= flightNumbers.Length) // if index less than 0 or index more than or equal  flightNumbers.Length (range) //Validate the input is within range
+
+            {
+            Console.WriteLine("Invalid flight selection");
+                return;
+            }
+
+
+
+            Console.WriteLine("Select a Date:  ");
+
+            for (int i = 0; i < availableDates.Count; i++)
+            {
+                Console.WriteLine(i + "     " + availableDates[i]);
+            }
+
+            Console.Write("enter Date index : ");
+            int Dateindex = int.Parse(Console.ReadLine());   // select a date by entering index number
+
+
+            if (Dateindex < 0 || Dateindex >= availableDates.Count) // if index less than 0 or index more than or equal  availableDates.Count (range) //Validate the input is within range
+
+            {
+                Console.WriteLine("Invalid Date selection");
+                return;
+            }
+
+            string selectedFlight = flightNumbers[Flightindex];   // to store 
+            string selectedDate = availableDates[Dateindex];
+
+           
+            bookingRecord.Add(ticketID , selectedFlight + "|" + selectedDate);  // store booking
+            Console.WriteLine(ticketID +"|"+ passengerName +"|" + selectedFlight + "|" + selectedDate);
+            Console.WriteLine("Booking saved successfully ");
+
+
+        }
+
+
 
         static void Main(string[] args)
         {
@@ -131,7 +210,7 @@ namespace MiniFlightManagementSystem
 
 
                     case 3:                              //  Book a Flight Ticket
-
+                        BookingTicket();
 
                         break;
 

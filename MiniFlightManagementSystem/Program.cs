@@ -236,9 +236,9 @@ namespace MiniFlightManagementSystem
             }
 
 
-            if (bookingRecord.ContainsKey(ticketID))   // to check key
+            if (!bookingRecord.ContainsKey(ticketID))
             {
-                Console.WriteLine("Ticket already has a booking ");
+                Console.WriteLine("No booking found for this ticket");
                 return;
             }
 
@@ -254,10 +254,18 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("1. Change flight only ");
             Console.WriteLine("2. Change date only  ");
             Console.WriteLine("3. Change both ");
-            Console.WriteLine("0.  Cancel update. ");
+            Console.WriteLine("0. Cancel update. ");
+            Console.Write("Select choice: ");
             int Choice = int.Parse(Console.ReadLine());
 
-           
+          
+            int flightIndex=0;
+            int dateIndex =0;
+
+            string selectedFlight = flightNumbers[flightIndex];
+            string selectedDate = availableDates[dateIndex];
+
+
             if (Choice == 1)
             {
                 for (int i = 0; i < flightNumbers.Length; i++)
@@ -266,10 +274,19 @@ namespace MiniFlightManagementSystem
                 }
 
                 Console.Write("Select new flight: ");
-                int flightIndex = int.Parse(Console.ReadLine());
+                flightIndex = int.Parse(Console.ReadLine());
 
-                string selectedFlight = flightNumbers[flightIndex];
+                if (flightIndex < 0 || flightIndex >= flightNumbers.Length)    // to vlidate input // should not be more than the selection
+                {
+                    Console.WriteLine("Invalid flight selection.");
+                    return;
+                }
 
+                selectedFlight = flightNumbers[flightIndex];
+
+                bookingRecord[ticketID] = selectedFlight + "|" + parts[1];  // update the booking for this ticket with the new flight, but keep the old date.
+
+                Console.WriteLine("Flight updated successfully");
             }
             else if (Choice == 2)
             {
@@ -279,22 +296,79 @@ namespace MiniFlightManagementSystem
                 }
 
                 Console.Write("Select new date: ");
-                int dateIndex = int.Parse(Console.ReadLine());
+                dateIndex = int.Parse(Console.ReadLine());
 
-                string selectedDate = availableDates[dateIndex];
+                selectedDate = availableDates[dateIndex];
+
+                if (dateIndex < 0 || dateIndex >= availableDates.Count)       // to vlidate input // should not be more than the selection
+                {
+                    Console.WriteLine("Invalid date selection.");
+                    return;
+                }
+
+                bookingRecord[ticketID] = parts[0] + "|" + selectedDate;  // here update the date and keep old flight as is it
+
+                Console.WriteLine("Date updated successfully.");
             }
             else if (Choice == 3)
             {
-               
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine(i + " - " + flightNumbers[i]);
+                }
+
+                Console.Write("Select new flight: ");         // to choose from flight index
+                flightIndex = int.Parse(Console.ReadLine());
+
+                if (flightIndex < 0 || flightIndex >= flightNumbers.Length)    // to vlidate input // should not be more than the selection
+                {
+                    Console.WriteLine("Invalid flight selection.");
+                    return;
+                }
+
+
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine(i + " - " + availableDates[i]);
+                }
+
+                Console.Write("Select new date: ");
+                dateIndex = int.Parse(Console.ReadLine());  // to choose from date index
+
+                if (dateIndex < 0 || dateIndex >= availableDates.Count)       // to vlidate input // should not be more than the selection
+                {
+                    Console.WriteLine("Invalid date selection.");
+                    return;
+                }
+
+                //string selectedFlight = flightNumbers[flightIndex];   // i need to do it outside the if
+                //string selectedDate = availableDates[dateIndex];
+
+                bookingRecord[ticketID] = selectedFlight + "|" + selectedDate;  
+
+                Console.WriteLine("Booking updated successfully");
             }
             else if (Choice == 0) 
             {
-                
+                Console.WriteLine("Update cancelled");
+                return;
             }
-           
 
+        
 
+            Console.WriteLine("--------------------------------");
+            Console.WriteLine("      BOOKING CONFIRMATION      ");
+            Console.WriteLine("--------------------------------");
 
+            Console.WriteLine("Old Flight:    " +parts[0]);
+            Console.WriteLine("Old Date:      " +parts[1]);
+
+            Console.WriteLine("--------------------------------");
+
+            Console.WriteLine("New Flight:   " +selectedFlight);
+            Console.WriteLine("New Date:     "+selectedDate);
+
+            Console.WriteLine("--------------------------------");
         }
 
 
@@ -352,14 +426,6 @@ namespace MiniFlightManagementSystem
                         ViewBooking();
 
                         break;
-                    //BookingTicket();
-
-
-
-
-
-
-
 
 
                     case 5:                            // Update a Booking

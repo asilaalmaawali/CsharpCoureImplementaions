@@ -165,12 +165,64 @@ namespace MiniFlightManagementSystem
             Console.WriteLine(ticketID +"|"+ passengerName +"|" + selectedFlight + "|" + selectedDate);
             Console.WriteLine("Booking saved successfully ");
 
-
         }
 
+        public static void ViewBooking()
+        {
+            Console.Write("Enter Ticket ID: ");
+            ticketID = Console.ReadLine().Trim();          // the passengers enters the ticket ID to view the booking details
 
 
-        static void Main(string[] args)
+            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            {
+
+                Console.WriteLine("The Ticket not exists yet");
+                return;
+            }
+
+            int index = ticketNumbers.IndexOf(ticketID); //search for Ticket Id
+
+            // view booking
+            Console.WriteLine("Passenger Name: " + passengerNames[index]);
+            Console.WriteLine("Ticket ID: " + ticketID);
+            Console.WriteLine("Booking: " + bookingRecord[ticketID]);
+
+
+            if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID   
+            {
+                Console.WriteLine("This ticket has been cancelled");
+                return;
+            }
+
+
+            if (!bookingRecord.ContainsKey(ticketID))   // must mention key to know that i mean to contain the key //  Use the bookingRecord dictionary to retrieve the booking value. 
+            {
+
+                Console.WriteLine("No booking found for this ticket");
+                return;
+            }
+
+            string bookingInfo = bookingRecord[ticketID];   // to store  bookingRecord in booking info
+            string[] parts = bookingInfo.Split('|');  // here to split the bookingRecord dictinary to be a parts not be linked
+
+            Console.WriteLine("===== BOOKING SUMMARY =====");
+            Console.WriteLine("Passenger Name : " + passengerName);
+            Console.WriteLine("Ticket ID      : " + ticketID);
+            Console.WriteLine("Flight Number  : " + parts[0]);
+            Console.WriteLine("Flight Date    : " + parts[1]);
+            Console.WriteLine("===========================");
+        }
+   
+
+       
+
+
+
+
+
+
+
+static void Main(string[] args)
         {
 
 
@@ -216,10 +268,13 @@ namespace MiniFlightManagementSystem
 
 
                     case 4:                             //  View Booking Details
+                        ViewBooking();
+
                         break;
 
 
                     case 5:                            // Update a Booking
+                     
                         break;
 
 

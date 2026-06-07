@@ -8,7 +8,7 @@ namespace MiniFlightManagementSystem
         // Storage system
 
         static List <string> passengerNames = new List<string> (5);
-        static List <int> ticketNumbers = new List<int> (5);
+        static List <string> ticketNumbers = new List<string> (5);
         static string[] flightNumbers = new string[6];
         static List<string> availableDates = new List<string>(4);
         static Dictionary<int,string> bookingRecord = new Dictionary<int,string>(); //  Key = ticketNumber, Value = flightNumber+date (e.g.'OA101|12-Jan-2026')
@@ -16,8 +16,41 @@ namespace MiniFlightManagementSystem
         static Stack <int> boardingStack = new Stack <int>();
         static List<int> cancelledTickets = new List<int>();
         static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
-       
+
+
+        //static passengerNames.AddRange(new string[] {});
+        public static void AddPassenger()
+        {
+            string passengerName;
+            Console.Write("Enter the new passenger full name: ");
+            passengerName = Console.ReadLine().Trim();  // without spaces
+    
+
+            if (passengerName == "")
+            {
+                Console.WriteLine("Passenger name cannot be empty");
+                return;
+            }
+            else if (passengerNames.Contains(passengerName))
+            {
+                Console.WriteLine("Passenger already exists");
+                return;
+            }
+            else
+            {
+                passengerNames.Add(passengerName); // to add it   
+                Console.WriteLine("Passenger added successfully");
+            }
+
+            string ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
+            ticketNumbers.Add(ticketID);  // to add it
+
+            Console.WriteLine("Passenger added successfully");
+            Console.WriteLine(passengerName +"  "+ ticketID);  // to print passenger name and their assigned ticket ID
+        }
+
         
+
         static void Main(string[] args)
         {
 
@@ -46,7 +79,7 @@ namespace MiniFlightManagementSystem
                 switch (choice)
                 {
                     case 1:                                //  Register New Passenger
-
+                        AddPassenger();
                         break;
 
 
@@ -92,6 +125,9 @@ namespace MiniFlightManagementSystem
                         break;
 
                 }
+
+                Console.Write("Enter your choice: ");
+                choice = int.Parse(Console.ReadLine());
             }
         }
     }

@@ -26,7 +26,7 @@ namespace MiniFlightManagementSystem
        
         public static void AddPassenger()
         {
-            //string passengerName;
+           
             Console.Write("Enter the new passenger full name: ");
             passengerName = Console.ReadLine().Trim();  // without spaces
     
@@ -93,7 +93,7 @@ namespace MiniFlightManagementSystem
 
         }
 
-      
+
         public static void BookingTicket()
         {
             Console.Write("Enter Ticket ID:  ");
@@ -107,7 +107,7 @@ namespace MiniFlightManagementSystem
             }
             else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
             {
-                Console.WriteLine("Ticket is already cancelled");
+                Console.WriteLine("This ticket has been cancelled");
                 return;
             }
 
@@ -211,10 +211,91 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Flight Number  : " + parts[0]);
             Console.WriteLine("Flight Date    : " + parts[1]);
             Console.WriteLine("===========================");
+
+
+
+
+
+
+
         }
-   
 
-       
+        public static void UpdateBooking()
+        {
+
+            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            {
+               
+                Console.WriteLine("The Ticket not exists yet");
+                return;
+            }
+            else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+            {
+                Console.WriteLine("This ticket has been cancelled");
+                return;
+            }
+
+
+            if (bookingRecord.ContainsKey(ticketID))   // to check key
+            {
+                Console.WriteLine("Ticket already has a booking ");
+                return;
+            }
+
+            string bookingInfo = bookingRecord[ticketID];   // every time i declare it becuase i dont do it in static
+
+            string[] parts = bookingInfo.Split('|');   // to split the dictionary
+
+            Console.WriteLine("Current Flight : " + parts[0]);
+            Console.WriteLine("Current Date   : " + parts[1]);
+
+
+            Console.WriteLine("=====  sub-menu: =====");
+            Console.WriteLine("1. Change flight only ");
+            Console.WriteLine("2. Change date only  ");
+            Console.WriteLine("3. Change both ");
+            Console.WriteLine("0.  Cancel update. ");
+            int Choice = int.Parse(Console.ReadLine());
+
+           
+            if (Choice == 1)
+            {
+                for (int i = 0; i < flightNumbers.Length; i++)
+                {
+                    Console.WriteLine(i + " - " + flightNumbers[i]);
+                }
+
+                Console.Write("Select new flight: ");
+                int flightIndex = int.Parse(Console.ReadLine());
+
+                string selectedFlight = flightNumbers[flightIndex];
+
+            }
+            else if (Choice == 2)
+            {
+                for (int i = 0; i < availableDates.Count; i++)
+                {
+                    Console.WriteLine(i + " - " + availableDates[i]);
+                }
+
+                Console.Write("Select new date: ");
+                int dateIndex = int.Parse(Console.ReadLine());
+
+                string selectedDate = availableDates[dateIndex];
+            }
+            else if (Choice == 3)
+            {
+               
+            }
+            else if (Choice == 0) 
+            {
+                
+            }
+           
+
+
+
+        }
 
 
 
@@ -222,7 +303,7 @@ namespace MiniFlightManagementSystem
 
 
 
-static void Main(string[] args)
+        static void Main(string[] args)
         {
 
 
@@ -271,10 +352,18 @@ static void Main(string[] args)
                         ViewBooking();
 
                         break;
+                    //BookingTicket();
+
+
+
+
+
+
+
 
 
                     case 5:                            // Update a Booking
-                     
+                        UpdateBooking();
                         break;
 
 

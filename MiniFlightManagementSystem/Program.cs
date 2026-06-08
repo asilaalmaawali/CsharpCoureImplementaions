@@ -24,6 +24,8 @@ namespace MiniFlightManagementSystem
         static string ticketID;
         static string status;
         static string bookingInfo;
+        static Queue<string> waitlistQueue = new Queue<string>();
+        static int i;
 
         public static void AddPassenger()
         {
@@ -88,6 +90,7 @@ namespace MiniFlightManagementSystem
                 }
 
                 Console.WriteLine("{0,-4} {1,-15} {2,-10} {3}" ,i ,passengerNames[i] ,ticketNumbers[i] ,status);  // i do spaces first to be organized
+                
 
             }
                 Console.WriteLine("total passenger count:   " + passengerNames.Count);
@@ -160,10 +163,10 @@ namespace MiniFlightManagementSystem
 
             string selectedFlight = flightNumbers[Flightindex];   // to store 
             string selectedDate = availableDates[Dateindex];
+         
 
-           
-            bookingRecord.Add(ticketID , selectedFlight + "|" + selectedDate);  // store booking
-            Console.WriteLine(ticketID +"|"+ passengerName +"|" + selectedFlight + "|" + selectedDate);
+            bookingRecord.Add(ticketID ,selectedFlight + "|" + selectedDate);  // store booking
+            Console.WriteLine(ticketID + "|" + passengerName + "|" + selectedFlight + "|" + selectedDate);
             Console.WriteLine("Booking saved successfully ");
 
         }
@@ -472,7 +475,127 @@ namespace MiniFlightManagementSystem
 
         }
 
+        public static void PassengerCheckIn()
+        {
 
+
+            Console.WriteLine("=====  sub-menu: =====");
+            Console.WriteLine("1. Check in a passenger");
+            Console.WriteLine("2. View check-in queue");
+            Console.WriteLine("3. Process next passenger");
+            Console.WriteLine("0. Back");
+            Console.Write("Select choice: ");
+            int Choice = int.Parse(Console.ReadLine());
+
+            
+
+
+            if (Choice == 1)
+            {
+
+                Console.Write("Enter Ticket ID:  ");
+                ticketID = Console.ReadLine().Trim();
+
+                if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+                {
+
+                    Console.WriteLine("The Ticket not exists yet");
+                    return;
+                }
+                else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+                {
+                    Console.WriteLine("This ticket has been cancelled");
+                    return;
+                }
+
+
+                if (!bookingRecord.ContainsKey(ticketID))
+                {
+                    Console.WriteLine("No booking record found.");
+                    return;
+                }
+
+                if (checkedInQueue.Contains(ticketID))   // if tickets inside checkedInQueue
+                {
+                    Console.WriteLine("Passenger is already in the queue");
+                    return;
+                }
+
+
+                if (checkedInQueue.Contains(ticketID) || waitlistQueue.Contains(ticketID))          // i do ticket becuase when i use to for passenger name it be conflict
+                {
+                    Console.WriteLine("Ticket already processed or waitlisted");
+                    return;
+                }
+
+                if (checkedInQueue.Count < 10)  // checkedInQueue.Count or length should be less than 10
+                {
+                    checkedInQueue.Enqueue(passengerName);
+                    Console.WriteLine("Check-in successful   " +passengerName +"  has been added to the check-in queue");
+                }
+               
+                else if (checkedInQueue.Count == 10)  // if checkedInQueue full
+                {
+                    waitlistQueue.Enqueue(passengerName);
+                    Console.WriteLine("Check-in queue is full. " +passengerName+ "  has been placed on the waitlist.");
+                }
+
+            }
+
+            else if (Choice == 2)
+            {
+                Console.WriteLine("==== View Check-In Queue =====");
+
+                if (checkedInQueue.Count == 0)   // if checkedInQueue empty 
+                {
+                    Console.WriteLine("No passengers in the check-in queue");
+                }
+                else
+                {
+                    int position = 1;
+
+                    foreach ( string passengerName in checkedInQueue)
+                    {
+                        Console.WriteLine(position +"  " +passengerName);      // view passengers in check in queue  foreach with position labels.
+                        position++;
+                    }
+                }
+
+                Console.WriteLine("Waitlist Count:" + waitlistQueue.Count);
+            }
+        
+            else if (Choice == 3)
+            {
+
+                if (checkedInQueue.Count == 0)
+                {
+                    Console.WriteLine("No passengers in the check-in queue.");
+                }
+                else
+                {
+                   
+                    string processedNextPassenger = checkedInQueue.Dequeue();
+
+                    Console.WriteLine("Processed passenger:  " + processedNextPassenger);
+
+                  
+                    if (waitlistQueue.Count > 0) // here to move fisrt waitlisted passenger into check-in queue  , in queue fisrt in first out
+                    {
+                        string waitlistedPassenger = waitlistQueue.Dequeue();  // to save inside waitlistedPassenger
+
+                        checkedInQueue.Enqueue(waitlistedPassenger);
+
+                        Console.WriteLine( "" +waitlistedPassenger +"has been moved from the waitlist to the check-in queue");
+                    }
+                }
+
+            }
+            else if (Choice == 0)
+            {
+                
+                return;
+            }
+        }
 
 
         static void Main(string[] args)
@@ -497,7 +620,7 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine("10. Manage Waitlist & Seat Assignment");
                 Console.WriteLine("0. Exit");
 
-                Console.Write("Enter your choice: ");
+                Console.Write("Enter your choice from main menu: : ");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -537,6 +660,7 @@ namespace MiniFlightManagementSystem
 
 
                     case 7:                            //  Passenger Check-In
+                        PassengerCheckIn();
                         break;
 
 
@@ -558,7 +682,7 @@ namespace MiniFlightManagementSystem
 
                 }
 
-                Console.Write("Enter your choice: ");
+                Console.Write("Enter your choice from main menu: ");
                 choice = int.Parse(Console.ReadLine());
             }
         }

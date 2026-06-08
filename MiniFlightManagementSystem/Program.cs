@@ -16,14 +16,15 @@ namespace MiniFlightManagementSystem
         static string[] flightNumbers = new string[6] { "OA101", "OA102", "OA103" , "OA104" , "OA105" , "OA106" };
         static List<string> availableDates = new List<string>(4){"7-June-2026", "8-June-2026", "9-June-2026", "10-June-2026" };
         static Dictionary<string,string> bookingRecord = new Dictionary<string,string>(); //  Key = ticketNumber, Value = flightNumber+date (e.g.'OA101|12-Jan-2026')
-        static Queue <int> checkedInQueue = new Queue <int>();
-        static Stack <int> boardingStack = new Stack <int>();
+        static Queue <string> checkedInQueue = new Queue <string>();
+        static Stack <string> boardingStack = new Stack <string>();
         static List<string> cancelledTickets = new List<string>();
         static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
         static string passengerName;
         static string ticketID;
         static string status;
-       
+        static string bookingInfo;
+
         public static void AddPassenger()
         {
            
@@ -50,7 +51,7 @@ namespace MiniFlightManagementSystem
             ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
             ticketNumbers.Add(ticketID);  // to add it
 
-            Console.WriteLine("Passenger added successfully");
+            
             Console.WriteLine(passengerName +"  "+ ticketID);  // to print passenger name and their assigned ticket ID
         }
 
@@ -202,7 +203,7 @@ namespace MiniFlightManagementSystem
                 return;
             }
 
-            string bookingInfo = bookingRecord[ticketID];   // to store  bookingRecord in booking info
+            bookingInfo = bookingRecord[ticketID];   // to store  bookingRecord in booking info    --- i will declare it outside to be used anywhere
             string[] parts = bookingInfo.Split('|');  // here to split the bookingRecord dictinary to be a parts not be linked
 
             Console.WriteLine("===== BOOKING SUMMARY =====");
@@ -371,8 +372,105 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("--------------------------------");
         }
 
+        public static void CancelBooking()
+        {
 
 
+            Console.Write("Enter Ticket ID: ");
+            ticketID = Console.ReadLine();
+
+
+            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            {
+
+                Console.WriteLine("The Ticket not exists yet");
+                return;
+            }
+            else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+            {
+                Console.WriteLine("This ticket has been cancelled");
+                return;
+            }
+
+
+           
+
+            //  Retrieve the associated passenger name from passengerNames using the index match.
+            int TicketIndex = ticketNumbers.IndexOf(ticketID);
+
+            passengerName = passengerNames[TicketIndex];   // give us the passenger name that stored in the same Ticket  
+
+            Console.WriteLine("Passenger Name: " + passengerName);
+
+
+            if (bookingRecord.ContainsKey(ticketID)) // if ticket exists in booking record
+            {
+               
+                Console.WriteLine("Removed Booking: " +ticketID + " -- " + bookingRecord[ticketID]); // to print
+
+                bookingInfo = bookingRecord[ticketID];  // save flight details
+                bookingRecord.Remove(ticketID);  // here to remove it from dictionary , i do it after the print because i need the booking record to be displayed , if i do it before the booking record will be empty and nothing to display.
+
+            }
+             
+            cancelledTickets.Add(ticketID); // to cancel ticket add ticketID inside cancelledTickets
+
+            // to remove passenger name from checkedInQueue using temporary Queue.
+            if (checkedInQueue.Contains(passengerName))   // if passengerName inside checkedInQueue
+            {
+                Queue<string> tempQueue = new Queue<string>();  // temprory queue to move all passenger their except what we want to remove it
+
+                while (checkedInQueue.Count > 0)
+                {
+                    string passenger = checkedInQueue.Dequeue();  // to remove pssenger from checkedInQueue
+
+                    if (passenger != passengerName)  // if passenger not equal to passengerName then add passenger inside tempQueue
+                    {
+                        tempQueue.Enqueue(passenger);  // to add it inside tempQueue
+                    }
+                }
+
+                checkedInQueue = tempQueue;   // replace old queue with the updated queue
+
+                Console.WriteLine(passengerName + " was removed from the check-in queue");
+            }
+
+            if (boardingStack.Contains(passengerName))   // if passengerName inside tempStack
+            {
+                Stack<string> tempStack = new Stack<string>();  // temprory stack to move all passenger their except what we want to remove it .    this tempstack to take all passengers but the order will be reverse 
+                Stack<string> finalStack = new Stack<string>(); // final stack also temprory but to do it in preserves order
+
+                while (boardingStack.Count > 0)
+                {
+                    string passenger = boardingStack.Pop();  // to remove pssenger from boardingStack
+
+                    if (passenger != passengerName)  // if passenger not equal to passengerName then add passenger inside tempStack
+                    {
+                        tempStack.Push(passenger);  // to add it inside tempStack
+                    }
+                }
+
+                while (tempStack.Count > 0)      
+                {
+                        finalStack.Push(tempStack.Pop());  // to add it inside finalStack .    //moves everything again and re-order it again back to normal
+
+                }
+
+                boardingStack = finalStack;   // to take the last updated stack
+
+                Console.WriteLine(passengerName + " was removed from the boarding stack ");
+            }
+
+           
+                Console.WriteLine("===== Cancellation Summary =====");
+                Console.WriteLine("Ticket ID      : " + ticketID);
+                Console.WriteLine("Passenger Name : " + passengerName);
+                Console.WriteLine("Flight Details : " + bookingInfo);
+                Console.WriteLine("Status         :   Cancelled ");
+                Console.WriteLine("===============================");
+
+
+        }
 
 
 
@@ -434,6 +532,7 @@ namespace MiniFlightManagementSystem
 
 
                     case 6:                            //  Cancel a Ticket
+                        CancelBooking();
                         break;
 
 

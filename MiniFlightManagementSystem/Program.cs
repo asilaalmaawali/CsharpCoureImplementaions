@@ -213,12 +213,6 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Flight Date    : " + parts[1]);
             Console.WriteLine("===========================");
 
-
-
-
-
-
-
         }
 
         public static void UpdateBooking()
@@ -472,9 +466,6 @@ namespace MiniFlightManagementSystem
 
         }
 
-
-
-
         static void Main(string[] args)
         {
 
@@ -537,6 +528,7 @@ namespace MiniFlightManagementSystem
 
 
                     case 7:                            //  Passenger Check-In
+                        
                         break;
 
 

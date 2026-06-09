@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Xml.Linq;
@@ -19,7 +21,7 @@ namespace MiniFlightManagementSystem
         static Queue <string> checkedInQueue = new Queue <string>();
         static Stack <string> boardingStack = new Stack <string>();
         static List<string> cancelledTickets = new List<string>();
-        static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
+        static Dictionary<string, string> passengerSeatMap = new Dictionary<string, string>();
         static string passengerName;
         static string ticketID;
         static string status;
@@ -27,7 +29,7 @@ namespace MiniFlightManagementSystem
         static Queue<string> waitlistQueue = new Queue<string>();
         static int i;
         static int index;
-
+        static int seatCounter = 1;
         public static void AddPassenger()
         {
            
@@ -598,6 +600,114 @@ namespace MiniFlightManagementSystem
             }
         }
 
+        public static void BoardPassengers()
+        {
+            //    1 Display a sub - menu: (1) Load boarding stack from check -in queue(2) Board next passenger(3) View boarding stack(4) View boarding log(0) Back.
+
+
+            Console.WriteLine("=====  sub-menu: =====");
+            Console.WriteLine("1. Load boarding stack from check -in queue ");
+            Console.WriteLine("2. Board next passenger");
+            Console.WriteLine("3. View boarding stack");
+            Console.WriteLine("4. View boarding log");
+            Console.WriteLine("0. Back");
+            Console.Write("Select choice: ");
+            int Choice = int.Parse(Console.ReadLine());
+
+
+           
+
+            if (Choice == 1)         // Load boarding stack from check -in queue
+            {
+
+                if (checkedInQueue.Count == 0 && boardingStack.Count > 0)
+                {
+                    Console.WriteLine("Passengers have already been loaded to the boarding stack");
+                }
+                else if (checkedInQueue.Count == 0)
+                {
+                    Console.WriteLine("No passengers available for boarding.");
+                }
+                else
+                {
+                    int loadingCount = 0;
+
+                    while (checkedInQueue.Count > 0)
+                    {
+                        string passenger = checkedInQueue.Dequeue(); // remove from queue and save it inside passenger
+                        boardingStack.Push(passenger);              // add it inside boarding stack
+                        loadingCount++;
+                    }
+
+                    Console.WriteLine(loadingCount + " passengers loaded into boarding stack");
+                }
+
+            }
+            else if (Choice == 2)   //     Board next passenger    
+            {
+                if (boardingStack.Count == 0)
+                {
+                    Console.WriteLine("No passengers ready for boarding.");
+                }
+                else
+                {
+                    string passenger = boardingStack.Pop();  // if boardingStack is not empty, pop(remove) the top passenger
+
+                    string seat = "12" + (char)('A' + seatCounter - 1);  // here to set a 'Row-Seat' (e.g. '12A','12B')
+
+                    passengerSeatMap[passenger] = seat;   // save the passenger seat number in the passengerSeatMap dictionary.
+
+                    Console.WriteLine("Passenger: " + passenger);
+                    Console.WriteLine("Assigned Seat: " + seat);
+
+                    seatCounter++;
+                }
+
+            }
+            else if (Choice == 3)  // View boarding stack
+            {
+                if (boardingStack.Count == 0)
+                {
+                    Console.WriteLine("Boarding stack is empty");
+                }
+                else
+                {
+                    int position = 1;
+
+                    foreach (string passenger in boardingStack)
+                    {
+                        Console.WriteLine(position + ". " + passenger);
+                        position++;
+                    }
+                }
+            }
+            else if (Choice == 4)  // View boarding log
+            {
+                if (passengerSeatMap.Count == 0)
+                {
+                    Console.WriteLine("No boarding records found");
+                }
+                else
+                { 
+                    foreach (KeyValuePair<string, string> seatInfo in passengerSeatMap)   // to print the passengerSeatMap dictionary  // Take each item from the dictionary one by one.
+                    {
+                        Console.WriteLine("Passenger: " + seatInfo.Key +
+                                          " | Seat: " + seatInfo.Value);
+                    }
+                }
+            }
+            else if (Choice == 0)
+            {
+                return;
+            }
+
+
+
+        }
+        
+
+
+
         static void Main(string[] args)
         {
 
@@ -667,6 +777,7 @@ namespace MiniFlightManagementSystem
 
 
                     case 8:                           // Board Passengers (Boarding Stack)
+                        BoardPassengers();
                         break;
 
 

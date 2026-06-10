@@ -779,7 +779,7 @@ namespace MiniFlightManagementSystem
                     case 8:                           // Board Passengers (Boarding Stack)
                         BoardPassengers();
                         break;
-
+                        try { } catch { }
 
                     case 9:                           // Generate Flight Manifest
                         break;

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Xml.Linq;
@@ -21,15 +19,14 @@ namespace MiniFlightManagementSystem
         static Queue <string> checkedInQueue = new Queue <string>();
         static Stack <string> boardingStack = new Stack <string>();
         static List<string> cancelledTickets = new List<string>();
-        static Dictionary<string, string> passengerSeatMap = new Dictionary<string, string>();
+        static Dictionary<int, string> passengerSeatMap = new Dictionary<int, string>();
         static string passengerName;
         static string ticketID;
         static string status;
         static string bookingInfo;
         static Queue<string> waitlistQueue = new Queue<string>();
         static int i;
-        static int index;
-        static int seatCounter = 1;
+
         public static void AddPassenger()
         {
            
@@ -166,10 +163,10 @@ namespace MiniFlightManagementSystem
 
             string selectedFlight = flightNumbers[Flightindex];   // to store 
             string selectedDate = availableDates[Dateindex];
-            index = ticketNumbers.IndexOf(ticketID);
+         
 
             bookingRecord.Add(ticketID ,selectedFlight + "|" + selectedDate);  // store booking
-            Console.WriteLine(ticketID + "|" + passengerNames[index] + "|" + selectedFlight + "|" + selectedDate);
+            Console.WriteLine(ticketID + "|" + passengerName + "|" + selectedFlight + "|" + selectedDate);
             Console.WriteLine("Booking saved successfully ");
 
         }
@@ -213,7 +210,7 @@ namespace MiniFlightManagementSystem
             string[] parts = bookingInfo.Split('|');  // here to split the bookingRecord dictinary to be a parts not be linked
 
             Console.WriteLine("===== BOOKING SUMMARY =====");
-            Console.WriteLine("Passenger Name : " + passengerNames[index]);
+            Console.WriteLine("Passenger Name : " + passengerName);
             Console.WriteLine("Ticket ID      : " + ticketID);
             Console.WriteLine("Flight Number  : " + parts[0]);
             Console.WriteLine("Flight Date    : " + parts[1]);
@@ -472,7 +469,6 @@ namespace MiniFlightManagementSystem
 
         }
 
-
         public static void PassengerCheckIn()
         {
 
@@ -493,8 +489,6 @@ namespace MiniFlightManagementSystem
 
                 Console.Write("Enter Ticket ID:  ");
                 ticketID = Console.ReadLine().Trim();
-
-                index = ticketNumbers.IndexOf(ticketID);
 
                 if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
                 {
@@ -530,16 +524,16 @@ namespace MiniFlightManagementSystem
 
                 if (checkedInQueue.Count < 10)  // checkedInQueue.Count or length should be less than 10
                 {
-                    checkedInQueue.Enqueue(passengerNames[index]);
-                    Console.WriteLine("Check-in successful   " +passengerNames[index] +"  has been added to the check-in queue");
+                    checkedInQueue.Enqueue(passengerName);
+                    Console.WriteLine("Check-in successful   " +passengerName +"  has been added to the check-in queue");
                 }
                
                 else if (checkedInQueue.Count == 10)  // if checkedInQueue full
                 {
-                    waitlistQueue.Enqueue(passengerNames[index]);
-                    Console.WriteLine("Check-in queue is full. " +passengerNames[index] + "  has been placed on the waitlist.");
+                    waitlistQueue.Enqueue(passengerName);
+                    Console.WriteLine("Check-in queue is full. " +passengerName+ "  has been placed on the waitlist.");
                 }
-               
+
             }
 
             else if (Choice == 2)
@@ -554,157 +548,21 @@ namespace MiniFlightManagementSystem
                 {
                     int position = 1;
 
-                    foreach (string passengerName in checkedInQueue)
+                    foreach ( string passengerName in checkedInQueue)
                     {
-                        
                         Console.WriteLine(position +"  " +passengerName);      // view passengers in check in queue  foreach with position labels.
                         position++;
                     }
                 }
 
                 Console.WriteLine("Waitlist Count:" + waitlistQueue.Count);
-              
             }
         
             else if (Choice == 3)
             {
 
-                if (checkedInQueue.Count == 0)
-                {
-                    Console.WriteLine("No passengers in the check-in queue.");
-                }
-                else
-                {
-                   
-                    string processedNextPassenger = checkedInQueue.Dequeue();
-
-                    Console.WriteLine("Processed passenger:  " + processedNextPassenger);
-
-                  
-                    if (waitlistQueue.Count > 0) // here to move fisrt waitlisted passenger into check-in queue  , in queue fisrt in first out
-                    {
-                        string waitlistedPassenger = waitlistQueue.Dequeue();  // to save inside waitlistedPassenger
-
-                        checkedInQueue.Enqueue(waitlistedPassenger);
-
-                        Console.WriteLine( "" +waitlistedPassenger +"has been moved from the waitlist to the check-in queue");
-                    }
-                   
-                }
-
-            }
-            else if (Choice == 0)
-            {
-                
-                return;
-            }
         }
 
-        public static void BoardPassengers()
-        {
-            //    1 Display a sub - menu: (1) Load boarding stack from check -in queue(2) Board next passenger(3) View boarding stack(4) View boarding log(0) Back.
-
-
-            Console.WriteLine("=====  sub-menu: =====");
-            Console.WriteLine("1. Load boarding stack from check -in queue ");
-            Console.WriteLine("2. Board next passenger");
-            Console.WriteLine("3. View boarding stack");
-            Console.WriteLine("4. View boarding log");
-            Console.WriteLine("0. Back");
-            Console.Write("Select choice: ");
-            int Choice = int.Parse(Console.ReadLine());
-
-
-           
-
-            if (Choice == 1)         // Load boarding stack from check -in queue
-            {
-
-                if (checkedInQueue.Count == 0 && boardingStack.Count > 0)
-                {
-                    Console.WriteLine("Passengers have already been loaded to the boarding stack");
-                }
-                else if (checkedInQueue.Count == 0)
-                {
-                    Console.WriteLine("No passengers available for boarding.");
-                }
-                else
-                {
-                    int loadingCount = 0;
-
-                    while (checkedInQueue.Count > 0)
-                    {
-                        string passenger = checkedInQueue.Dequeue(); // remove from queue and save it inside passenger
-                        boardingStack.Push(passenger);              // add it inside boarding stack
-                        loadingCount++;
-                    }
-
-                    Console.WriteLine(loadingCount + " passengers loaded into boarding stack");
-                }
-
-            }
-            else if (Choice == 2)   //     Board next passenger    
-            {
-                if (boardingStack.Count == 0)
-                {
-                    Console.WriteLine("No passengers ready for boarding.");
-                }
-                else
-                {
-                    string passenger = boardingStack.Pop();  // if boardingStack is not empty, pop(remove) the top passenger
-
-                    string seat = "12" + (char)('A' + seatCounter - 1);  // here to set a 'Row-Seat' (e.g. '12A','12B')
-
-                    passengerSeatMap[passenger] = seat;   // save the passenger seat number in the passengerSeatMap dictionary.
-
-                    Console.WriteLine("Passenger: " + passenger);
-                    Console.WriteLine("Assigned Seat: " + seat);
-
-                    seatCounter++;
-                }
-
-            }
-            else if (Choice == 3)  // View boarding stack
-            {
-                if (boardingStack.Count == 0)
-                {
-                    Console.WriteLine("Boarding stack is empty");
-                }
-                else
-                {
-                    int position = 1;
-
-                    foreach (string passenger in boardingStack)
-                    {
-                        Console.WriteLine(position + ". " + passenger);
-                        position++;
-                    }
-                }
-            }
-            else if (Choice == 4)  // View boarding log
-            {
-                if (passengerSeatMap.Count == 0)
-                {
-                    Console.WriteLine("No boarding records found");
-                }
-                else
-                { 
-                    foreach (KeyValuePair<string, string> seatInfo in passengerSeatMap)   // to print the passengerSeatMap dictionary  // Take each item from the dictionary one by one.
-                    {
-                        Console.WriteLine("Passenger: " + seatInfo.Key +
-                                          " | Seat: " + seatInfo.Value);
-                    }
-                }
-            }
-            else if (Choice == 0)
-            {
-                return;
-            }
-
-
-
-        }
-        
 
 
 
@@ -730,7 +588,7 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine("10. Manage Waitlist & Seat Assignment");
                 Console.WriteLine("0. Exit");
 
-                Console.Write("Enter your choice from main menu:  ");
+                Console.Write("Enter your choice from main menu: : ");
                 int choice = int.Parse(Console.ReadLine());
 
                 switch (choice)
@@ -770,14 +628,10 @@ namespace MiniFlightManagementSystem
 
 
                     case 7:                            //  Passenger Check-In
-
-                        PassengerCheckIn();
-
                         break;
 
 
                     case 8:                           // Board Passengers (Boarding Stack)
-                        BoardPassengers();
                         break;
 
 
@@ -795,7 +649,7 @@ namespace MiniFlightManagementSystem
 
                 }
 
-                Console.Write("Enter your choice from main menu : ");
+                Console.Write("Enter your choice from main menu: ");
                 choice = int.Parse(Console.ReadLine());
             }
         }

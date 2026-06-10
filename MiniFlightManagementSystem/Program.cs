@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
+using System.IO;  // to used for save file , read and write file
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
 namespace MiniFlightManagementSystem
 {
     internal class Program
@@ -30,6 +30,62 @@ namespace MiniFlightManagementSystem
         static int i;
         static int index;
         static int seatCounter = 1;
+
+        static string pathpassenger = "passenger.txt";   // this path where i saved the passenger name , it will be in the same project path for that i dont need to do path as (C://downd...etc
+
+        public static void PassengersFile()
+        {
+            bool fileExists = File.Exists(pathpassenger);
+            //Write
+            using (StreamWriter writer = new StreamWriter(pathpassenger))  // it will be in the same project path for that i dont need to do path as (C://downd...etc
+            {
+               
+                if (!fileExists)
+                {
+                    writer.WriteLine("Passenger Name | Ticket ID");
+                }
+
+                writer.WriteLine(passengerName + " | " + ticketID);
+            }
+
+        }
+
+
+
+        public static void ReadPassengersFile()
+        {
+
+
+
+            if (File.Exists(pathpassenger))
+            {
+                // Reading the file using StreamReader 
+                using (StreamReader reader = new StreamReader(pathpassenger))
+                {
+                    string content = reader.ReadToEnd(); // Reads the entire file
+                    //Console.WriteLine("Passenger file");    if i want to view the files inside the CMD in the top
+                   // Console.WriteLine(content);
+                }
+            }
+            else
+            {
+                Console.WriteLine("File not found.");
+
+            }
+        }
+       
+
+        //public static void AppendPassengersFile()
+        //{
+        //    using (StreamWriter writer = new StreamWriter(pathpassenger, true))
+        //    {
+
+        //        writer.WriteLine(i + "  |  " + passengerNames[i] + "  |  " + ticketNumbers[i] + "  |   " + status);
+        //        //PassengersFile();
+        //        //string PassengerFile = (i + passengerNames[i] + ticketNumbers[i] + status);
+        //    }
+        //    Console.WriteLine("Append passenger file");
+        //}
         public static void AddPassenger()
         {
            
@@ -58,12 +114,14 @@ namespace MiniFlightManagementSystem
 
             
             Console.WriteLine(passengerName +"  "+ ticketID);  // to print passenger name and their assigned ticket ID
+
+            PassengersFile();  // here to save the file after add it sucessfully.. // this code should be after codes that add and save like ( ticketNumbers.Add(ticketID);  , passengerNames.Add(passengerName);)
+            //AppendPassengersFile(); // to add another passenger but without deleting pervious one .
         }
 
         public static void ViewPassenger()
         {
-
-
+           
             if (passengerName == "")
             {
                 Console.WriteLine(" 'No passengers registered yet");
@@ -72,10 +130,10 @@ namespace MiniFlightManagementSystem
             else
             {
                 Console.WriteLine("No.|Passenger Name |Ticket ID|  Status");
-                
+
             }
 
-            //string status;
+            string status;
             for (int i = 0; i < passengerNames.Count; i++)
             {
 
@@ -92,11 +150,11 @@ namespace MiniFlightManagementSystem
 
                 }
 
-                Console.WriteLine("{0,-4} {1,-15} {2,-10} {3}" ,i ,passengerNames[i] ,ticketNumbers[i] ,status);  // i do spaces first to be organized
-                
+                Console.WriteLine("{0,-4} {1,-15} {2,-10} {3}", i, passengerNames[i], ticketNumbers[i], status);  // i do spaces first to be organized
+
 
             }
-                Console.WriteLine("total passenger count:   " + passengerNames.Count);
+            Console.WriteLine("total passenger count:   " + passengerNames.Count);
 
         }
 
@@ -201,6 +259,8 @@ namespace MiniFlightManagementSystem
             Console.WriteLine(ticketID + "|" + passengerNames[index] + "|" + selectedFlight + "|" + selectedDate);
             Console.WriteLine("Booking saved successfully ");
 
+
+            
         }
       
 
@@ -478,6 +538,9 @@ namespace MiniFlightManagementSystem
             }
              
             cancelledTickets.Add(ticketID); // to cancel ticket add ticketID inside cancelledTickets
+
+            PassengersFile(); // to save in file if the tickets was cancelled
+            //AppendPassengersFile();
 
             // to remove passenger name from checkedInQueue using temporary Queue.
             if (checkedInQueue.Contains(passengerName))   // if passengerName inside checkedInQueue
@@ -774,7 +837,7 @@ namespace MiniFlightManagementSystem
 
         static void Main(string[] args)
         {
-
+            ReadPassengersFile();
 
             bool exit = false;
             while (exit == false)

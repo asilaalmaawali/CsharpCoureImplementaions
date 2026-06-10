@@ -106,26 +106,55 @@ namespace MiniFlightManagementSystem
             Console.Write("Enter Ticket ID:  ");
             ticketID = Console.ReadLine().Trim();
 
-            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
-            {
+            //if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            //{
 
+            //    Console.WriteLine("The Ticket not exists yet");
+            //    return;
+            //}
+
+            string ticket = ticketNumbers.Where(t => t == ticketID).FirstOrDefault();  // give me the first matching ticket. If nothing is found, go back to the default value. 
+
+            if (ticket == null)   // the default for string is null so it should appear an error, so if come null print this 
+            {
                 Console.WriteLine("The Ticket not exists yet");
                 return;
             }
-            else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+
+
+            //if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+            //{
+            //    Console.WriteLine("This ticket has been cancelled");
+            //    return;
+            //}
+
+            string Cancelled = cancelledTickets.Where(c => c == ticketID).FirstOrDefault(); // give me the first matching ticket that cancelled . If nothing is found, go back to the default value. 
+
+            if (Cancelled != null)   // if cancelled not null and there is a cancel ticket that matching ticket ID so it will print this message
             {
                 Console.WriteLine("This ticket has been cancelled");
                 return;
             }
 
 
-            if (bookingRecord.ContainsKey(ticketID))   // to check key
+            string booking = bookingRecord.Keys.Where(b => b == ticketID).FirstOrDefault(); //here go through all booking ticket ID. if we find the ticket ID,we store it inside booking. Otherwise store null.
+
+
+            if (booking != null)  // if booking not null and there is a booked ticket that matching ticket ID so it will print this message
             {
                 Console.WriteLine("Ticket already has a booking ");
                 return;
-            }
 
-        
+
+            }
+            // if (bookingRecord.ContainsKey(ticketID))   // to check key
+            //{
+            //    Console.WriteLine("Ticket already has a booking ");
+            //    return;
+            //}
+
+
+
             Console.WriteLine("Select a flight:  ");
 
             for (int i = 0; i < flightNumbers.Length; i++)
@@ -173,6 +202,7 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Booking saved successfully ");
 
         }
+      
 
         public static void ViewBooking()
         {
@@ -180,12 +210,58 @@ namespace MiniFlightManagementSystem
             ticketID = Console.ReadLine().Trim();          // the passengers enters the ticket ID to view the booking details
 
 
-            if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
-            {
+            //if (!ticketNumbers.Contains(ticketID))  // if the ticketNumbers not contain in ticketID
+            //{
 
+            //    Console.WriteLine("The Ticket not exists yet");
+            //    return;
+            //}
+
+            string ticket = ticketNumbers.Where(t => t == ticketID).FirstOrDefault();  // give me the first matching ticket. If nothing is found, go back to the default value. 
+
+            if (ticket == null)   // the default for string is null so it should appear an error, so if come null print this 
+            {
                 Console.WriteLine("The Ticket not exists yet");
                 return;
             }
+
+
+            //if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID   
+            //{
+            //    Console.WriteLine("This ticket has been cancelled");
+            //    return;
+            //}
+
+
+            //if (!bookingRecord.ContainsKey(ticketID))   // must mention key to know that i mean to contain the key //  Use the bookingRecord dictionary to retrieve the booking value. 
+            //{
+
+            //    Console.WriteLine("No booking found for this ticket");
+            //    return;
+            //}
+
+            string Cancelled = cancelledTickets.Where(c => c == ticketID).FirstOrDefault(); // give me the first matching ticket that cancelled . If nothing is found, go back to the default value. 
+
+            if (Cancelled != null)   // if cancelled not null and there is a cancel ticket that matching ticket ID so it will print this message
+            {
+                Console.WriteLine("This ticket has been cancelled");
+                return;
+            }
+
+            string booking = bookingRecord.Keys.Where(b => b == ticketID).FirstOrDefault();
+
+            if (booking == null)
+            {
+                Console.WriteLine("No booking found for this ticket");
+                return;
+            }
+
+            //if (!bookingRecord.ContainsKey(ticketID))   // must mention key to know that i mean to contain the key //  Use the bookingRecord dictionary to retrieve the booking value. 
+            //{
+
+            //    Console.WriteLine("No booking found for this ticket");
+            //    return;
+            //}
 
             int index = ticketNumbers.IndexOf(ticketID); //search for Ticket Id
 
@@ -194,20 +270,6 @@ namespace MiniFlightManagementSystem
             Console.WriteLine("Ticket ID: " + ticketID);
             Console.WriteLine("Booking: " + bookingRecord[ticketID]);
 
-
-            if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID   
-            {
-                Console.WriteLine("This ticket has been cancelled");
-                return;
-            }
-
-
-            if (!bookingRecord.ContainsKey(ticketID))   // must mention key to know that i mean to contain the key //  Use the bookingRecord dictionary to retrieve the booking value. 
-            {
-
-                Console.WriteLine("No booking found for this ticket");
-                return;
-            }
 
             bookingInfo = bookingRecord[ticketID];   // to store  bookingRecord in booking info    --- i will declare it outside to be used anywhere
             string[] parts = bookingInfo.Split('|');  // here to split the bookingRecord dictinary to be a parts not be linked
@@ -230,7 +292,9 @@ namespace MiniFlightManagementSystem
                 Console.WriteLine("The Ticket not exists yet");
                 return;
             }
-            else if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
+
+
+            if (cancelledTickets.Contains(ticketID))   // i need to check the ticket cancelled or not , check cancelledTickets contain ticketID
             {
                 Console.WriteLine("This ticket has been cancelled");
                 return;
@@ -779,7 +843,7 @@ namespace MiniFlightManagementSystem
                     case 8:                           // Board Passengers (Boarding Stack)
                         BoardPassengers();
                         break;
-                        try { } catch { }
+
 
                     case 9:                           // Generate Flight Manifest
                         break;

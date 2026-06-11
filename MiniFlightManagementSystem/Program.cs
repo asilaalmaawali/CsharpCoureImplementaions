@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Diagnostics.Metrics;
 using System.IO;  // to used for save file , read and write file
 using System.Net.NetworkInformation;
@@ -33,147 +34,86 @@ namespace MiniFlightManagementSystem
 
         static string pathpassenger = "passenger.txt";   // this path where i saved the passenger name , it will be in the same project path for that i dont need to do path as (C://downd...etc
 
-        //public static void PassengersFile()
+
+        //public static void DeletePassenger()                     //here to delete the records
         //{
-        //    // i used here read because i want first to read file then write to avoid duplicate
-        //    string PassINFO = passengerName + " | " + ticketID;   // to save the 
+        //    Console.Write("Enter passenger name to delete: ");
+        //    string name = Console.ReadLine().Trim();
 
-        //    if (File.Exists(pathpassenger))
-        //    {
-        //        string[] lines = File.ReadAllLines(pathpassenger); // to read all lines
+        //    List<string> lines = File.ReadAllLines(pathpassenger).ToList();
 
-        //        if (lines.Contains(PassINFO))
-        //        {
-        //            Console.WriteLine("Passenger already exists.");
-        //            return;
-        //        }
-        //    }
+        //    lines.RemoveAll(line => line.StartsWith(name + "|"));
 
-        //    bool fileExists = File.Exists(pathpassenger);
+        //    File.WriteAllLines(pathpassenger, lines);
 
-        //    using (StreamWriter writer = new StreamWriter(pathpassenger, true))  // to save and without deleting pervious data
-        //    {
-        //        if (!fileExists)
-        //        {
-        //            writer.WriteLine("Passenger Name | Ticket ID");
-        //        }
-
-        //        writer.WriteLine(PassINFO);
-        //    }
-
-        //    Console.WriteLine("Added successfully.");
+        //    Console.WriteLine("Passenger deleted successfully.");
         //}
 
-        public static void PassengersFile()
-        {
-            string PassINFO = passengerName + " | " + ticketID;
-
-            bool fileExists = File.Exists(pathpassenger);
-
-            // Read file only if it exists (to check duplicates)
-            if (File.Exists(pathpassenger))
-            {
-
-                // Reading the file using StreamReader 
-                using (StreamReader reader = new StreamReader(pathpassenger))
-                {
-
-                    string content = reader.ReadToEnd(); // Reads the entire file
-                    Console.WriteLine("Passenger file"); //if i want to view the files inside the CMD in the top
-                    Console.WriteLine(content);
-                }
-                if (pathpassenger.Contains(PassINFO))
-                {
-                    Console.WriteLine("Passenger already exists.");
-                    return;
-
-                }
-                else
-                {
-                    Console.WriteLine("File not found.");
-
-                }
-                using (StreamWriter writer = new StreamWriter(pathpassenger, true))
-                {
-                    // write header only once
-                    if (!fileExists)
-                    {
-                        writer.WriteLine("Passenger Name | Ticket ID");
-                    }
-
-                    // write new passenger
-                    writer.WriteLine(PassINFO);
-                }
-            }
-
-        }
-        
-
-        //public static void ReadPassengersFile()
+        //public static void ClearPassengersFile()
         //{
-
-        //    if (File.Exists(pathpassenger))
-        //    {
-        //        // Reading the file using StreamReader 
-        //        using (StreamReader reader = new StreamReader(pathpassenger))
-        //        {
-        //            string content = reader.ReadToEnd(); // Reads the entire file
-        //            Console.WriteLine("Passenger file"); //if i want to view the files inside the CMD in the top
-        //            Console.WriteLine(content);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("File not found.");
-
-        //    }
-        //}
-
-        //public static void LoadPassengersFile()
-        //{
-        //    if (File.Exists(pathpassenger))
-        //    {
-        //        Console.WriteLine(File.ReadAllText(pathpassenger));
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("File not found.");
-        //    }
+        //    File.WriteAllText(pathpassenger, "");
+        //    Console.WriteLine("All passenger records deleted.");
         //}
 
 
         public static void AddPassenger()
         {
-           
-            Console.Write("Enter the new passenger full name: ");
-            passengerName = Console.ReadLine().Trim();  // without spaces
-    
+            //DeletePassenger();
+            //ClearPassengersFile();
+            if (File.Exists(pathpassenger))
+            {
+
+
+                Console.Write("Enter the new passenger full name: ");
+                passengerName = Console.ReadLine().Trim();  // without spaces
+
+                using (StreamReader reader = new StreamReader(pathpassenger))  // to read the file
+                {
+                    string line;
+
+                    while ((line = reader.ReadLine()) != null)    // here to read all lines
+                    {
+                       
+                        Console.WriteLine("Read from file: " + line);
+
+                        string[] parts = line.Split('|');
+
+                        passengerNames.Add(parts[0]);
+                        ticketNumbers.Add(parts[1]);
+                    }
+                }
+            }
+
+
+
 
             if (passengerName == "")
             {
                 Console.WriteLine("Passenger name cannot be empty");
                 return;
             }
-            else if (passengerNames.Contains(passengerName))
+            if (passengerNames.Contains(passengerName))                       // after i add read and write this caused me a problem i cant add passenegr everytime shows me "Passenger already exists"
             {
                 Console.WriteLine("Passenger already exists");
                 return;
             }
-            else
-            {
-                passengerNames.Add(passengerName); // to add it   
-                Console.WriteLine("Passenger added successfully");
-            }
+
+            passengerNames.Add(passengerName); // to add it   
+            Console.WriteLine("Passenger added successfully");
+           
 
             ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
             ticketNumbers.Add(ticketID);  // to add it
 
-            
-            Console.WriteLine(passengerName +"  "+ ticketID);  // to print passenger name and their assigned ticket ID
 
-            //PassengersFile();  // here to save the file after add it sucessfully.. // this code should be after codes that add and save like ( ticketNumbers.Add(ticketID);  , passengerNames.Add(passengerName);)
-            //AppendPassengersFile(); // to add another passenger but without deleting pervious one .
+            using (StreamWriter writer = new StreamWriter(pathpassenger,true))
+            {
+                writer.WriteLine(passengerName + "|" + ticketID);
+            }
+
         }
+
+    
 
         public static void ViewPassenger()
         {
@@ -595,8 +535,7 @@ namespace MiniFlightManagementSystem
              
             cancelledTickets.Add(ticketID); // to cancel ticket add ticketID inside cancelledTickets
 
-            PassengersFile(); // to save in file if the tickets was cancelled
-            //AppendPassengersFile();
+           
 
             // to remove passenger name from checkedInQueue using temporary Queue.
             if (checkedInQueue.Contains(passengerName))   // if passengerName inside checkedInQueue
@@ -893,14 +832,15 @@ namespace MiniFlightManagementSystem
 
         static void Main(string[] args)
         {
-            PassengersFile();
-
+           
+            
 
             bool exit = false;
             while (exit == false)
             {
-
                 
+
+
                 Console.WriteLine("-------------------------------------");
                 Console.WriteLine("SKY WINGS FLIGHT MANAGEMENT SYSTEM");
                 Console.WriteLine("-------------------------------------");

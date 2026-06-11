@@ -105,10 +105,16 @@ namespace MiniFlightManagementSystem
             ticketID = "TKT-" + (passengerNames.Count).ToString().PadLeft(3, '0');  // fortmat "TXT-XXX" ---- 
             ticketNumbers.Add(ticketID);  // to add it
 
-
-            using (StreamWriter writer = new StreamWriter(pathpassenger,true))
+            try
             {
-                writer.WriteLine(passengerName + "|" + ticketID);
+                using (StreamWriter writer = new StreamWriter(pathpassenger, true))
+                {
+                    writer.WriteLine(passengerName + "|" + ticketID);
+                }
+            }
+            catch (Exception ex)       // to view error message
+            {
+                Console.WriteLine("Error saving passenger: " + ex.Message);
             }
 
         }
